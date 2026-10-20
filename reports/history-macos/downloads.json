@@ -1,0 +1,20 @@
+{
+  "files": [
+    {
+      "name": "noisy_trainset_28spk_wav.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/ecb5a102-bb00-46d3-8af5-40c79823b837/content",
+      "size_bytes": 2830205201,
+      "md5": "1fca9e8bafb8cd069f6653c6d92f9e9c",
+      "sha256": "a656af041f5a8931b02077331281c2b82ebc35b38dc83ff92935015bcd7920b4",
+      "uncompressed_bytes": 3246118470
+    },
+    {
+      "name": "trainset_28spk_txt.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/fb55b5de-c2db-4451-ac0a-134e98011ffa/content",
+      "size_bytes": 6489312,
+      "md5": "48bfcd5945165c60ab9d2f312f4d6e1c",
+      "sha256": "5ec7d6ef99b78a7d039f1ecd6db7d0d5b660877b464de15e1d75de6425fbf3f8",
+      "uncompressed_bytes": 2928055
+    }
+  ]
+}

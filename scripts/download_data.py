@@ -1,4 +1,4 @@
-"""Download only the two requested official archives; verify before extracting."""
+"""Download configured official archives; verify before extracting."""
 import argparse
 import concurrent.futures
 import hashlib
@@ -111,6 +111,8 @@ def download(item, connections=1):
     md5, sha256 = hashes(candidate)
     if md5 != item["md5"]:
         raise ValueError(f"Official MD5 mismatch: {candidate}; keep file for inspection")
+    if item.get("expected_sha256") and sha256 != item["expected_sha256"]:
+        raise ValueError(f"SHA-256 mismatch: {candidate}; keep file for inspection")
     if candidate != destination:
         candidate.replace(destination)
     cache = ROOT / ".cache/download_parts" / item["name"]
@@ -141,15 +143,41 @@ def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument("--extract", action="store_true")
     parser.add_argument("--connections", type=int, default=4, choices=range(1, 5))
+    parser.add_argument("--mirror-config", help="Optional mirror URLs; official size/MD5 checks always apply")
+    parser.add_argument("--files", nargs="+", help="Only these configured archive names; preserve other report entries")
     args = parser.parse_args()
     files = json.loads((ROOT / "configs/downloads.json").read_text())["files"]
+    if args.mirror_config:
+        mirror_path = Path(args.mirror_config).expanduser()
+        if not mirror_path.is_absolute():
+            mirror_path = ROOT / mirror_path
+        mirrors = json.loads(mirror_path.read_text())["files"]
+        unknown = set(mirrors) - {item["name"] for item in files}
+        if unknown:
+            raise ValueError(f"Unknown mirror archive names: {sorted(unknown)}")
+        for item in files:
+            if item["name"] in mirrors:
+                mirror = mirrors[item["name"]]
+                expected = mirror["expected_sha256"]
+                if len(expected) != 64 or any(c not in "0123456789abcdef" for c in expected):
+                    raise ValueError("Mirror configuration requires a lowercase SHA-256")
+                item.update(official_url=item["url"], url=mirror["url"],
+                            expected_sha256=expected, mirror_revision=mirror.get("mirror_revision"))
+    if args.files:
+        unknown = set(args.files) - {item["name"] for item in files}
+        if unknown:
+            parser.error(f"Unknown archive names: {sorted(unknown)}")
+        files = [item for item in files if item["name"] in args.files]
     with concurrent.futures.ThreadPoolExecutor(max_workers=2) as pool:
         verified = list(pool.map(lambda item: download(item, args.connections), files))
     if args.extract:
         verified = [extract(item) for item in verified]
     target = ROOT / "reports/downloads.json"
     target.parent.mkdir(parents=True, exist_ok=True)
-    target.write_text(json.dumps({"files": verified}, ensure_ascii=False, indent=2) + "\n")
+    previous = json.loads(target.read_text())["files"] if target.exists() else []
+    by_name = {item["name"]: item for item in previous}
+    by_name.update({item["name"]: item for item in verified})
+    target.write_text(json.dumps({"files": list(by_name.values())}, ensure_ascii=False, indent=2) + "\n")
     print(f"Report: {target}", flush=True)
 
 

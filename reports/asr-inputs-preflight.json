@@ -1,0 +1,76 @@
+{
+  "status": "ready",
+  "config": {
+    "model": "large-v2",
+    "device": "cuda",
+    "beam_size": 60,
+    "nbest": 5,
+    "language": "en",
+    "task": "transcribe",
+    "temperature": 0.0,
+    "without_timestamps": true,
+    "purpose": "Formal train/dev/test candidate generation; RTX 3090 beam60 smoke validated, full runs recorded separately"
+  },
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "checkpoint_sha256": "81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524",
+  "splits": {
+    "train": {
+      "utterances": 10830,
+      "input_sha256": "57486484893ed4d360480de7eccda6c63424728f22bf360f387ba2edac944cb1",
+      "hours": 8.74717526041668,
+      "speakers": [
+        "p228",
+        "p230",
+        "p231",
+        "p233",
+        "p236",
+        "p239",
+        "p243",
+        "p244",
+        "p250",
+        "p254",
+        "p256",
+        "p258",
+        "p259",
+        "p267",
+        "p268",
+        "p269",
+        "p270",
+        "p273",
+        "p274",
+        "p276",
+        "p277",
+        "p278",
+        "p279",
+        "p282",
+        "p286",
+        "p287"
+      ],
+      "labels_in_asr_input": false
+    },
+    "dev": {
+      "utterances": 742,
+      "input_sha256": "4712879bbe1e53b27f94aff2d67f4a9e8399077aaede808f72e646558252cde9",
+      "hours": 0.6440553587962956,
+      "speakers": [
+        "p226",
+        "p227"
+      ],
+      "labels_in_asr_input": false
+    },
+    "test": {
+      "utterances": 824,
+      "input_sha256": "4ff3b5d015e46c6c990a9c17449e2ca8984a5a1c0a1069a9b2e561efec646c33",
+      "hours": 0.5755640162037036,
+      "speakers": [
+        "p232",
+        "p257"
+      ],
+      "labels_in_asr_input": false
+    }
+  },
+  "total_utterances": 12396,
+  "cross_split_id_speaker_audio_overlap": false,
+  "audio_loading": "FFmpeg decodes to mono 16 kHz; all source recordings fit 30 seconds.",
+  "test_policy": "Generate test hypotheses separately; select models using train/dev only."
+}

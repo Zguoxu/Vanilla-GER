@@ -1,0 +1,28 @@
+{
+  "change": "Use explicit cache lookup so a hit does not evaluate key/value projections again.",
+  "original_model_sha256": "b222c193efcb74b832eaae71bc236e4061435ed3eafd13fa339ce7399771dd95",
+  "updated_model_sha256": "5606bd8b4220dd5a8f59d2f6184d72c986f209f448c105f0ef54172648c86cbf",
+  "baseline_directory": "data/hypotheses/large-v2-beam60-probe-10-before-cache-fix",
+  "baseline_seconds_per_utterance": 17.602007383199997,
+  "status": "verified",
+  "tiny_en_equivalence": {
+    "train": {
+      "utterances": 32,
+      "nbest_and_candidate_text_identical": true,
+      "maximum_score_difference": 0.0
+    },
+    "dev": {
+      "utterances": 4,
+      "nbest_and_candidate_text_identical": true,
+      "maximum_score_difference": 0.0
+    }
+  },
+  "large_v2_equivalence": {
+    "utterances": 10,
+    "nbest_and_candidate_text_identical": true,
+    "maximum_score_difference": 0.0
+  },
+  "optimized_seconds_per_utterance": 8.531264625999938,
+  "speedup": 2.06323542345129,
+  "projected_11572_utterance_decode_hours": 27.423276181130912
+}

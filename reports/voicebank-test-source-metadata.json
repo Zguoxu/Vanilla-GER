@@ -1,0 +1,36 @@
+{
+  "checked_at": "2026-10-21T00:05:29.026362+08:00",
+  "official_dataset": "https://doi.org/10.7488/ds/2117",
+  "official_item_api": "https://datashare.ed.ac.uk/server/api/core/items/6ed35425-bf14-4d2b-93a1-0a4984952757",
+  "official_files": [
+    {
+      "name": "noisy_testset_wav.zip",
+      "bytes": 170578854,
+      "md5": "fb1b86caa31e8ba5b506c0c64da9aab5",
+      "metadata_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/13c1bfbf-14a6-41db-9b41-8f7310f01ad5",
+      "content_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/13c1bfbf-14a6-41db-9b41-8f7310f01ad5/content"
+    },
+    {
+      "name": "testset_txt.zip",
+      "bytes": 440277,
+      "md5": "6ca8ef3756f3769c05bb694e77ad29f0",
+      "metadata_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/09e12592-879e-4749-bf6d-e34cf0d1ddf6",
+      "content_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/09e12592-879e-4749-bf6d-e34cf0d1ddf6/content"
+    }
+  ],
+  "mirror_revision": "02bc68c5ad97ca55b9b7f3a7edd101585b0434e3",
+  "mirror_files": [
+    {
+      "type": "file",
+      "oid": "022c15f6efd2d75820566a62e7f9138ff83764c2",
+      "size": 170578854,
+      "lfs": {
+        "oid": "ba4a893f45b627f15209ba30ab584dd495b3680cd6f216dd08d143a257611993",
+        "size": 170578854,
+        "pointerSize": 134
+      },
+      "xetHash": "73857968255ec7f3dd0e424d3e494542739ab282607ed46eff25eafb0b86db54",
+      "path": "noisy_testset_wav.zip"
+    }
+  ]
+}

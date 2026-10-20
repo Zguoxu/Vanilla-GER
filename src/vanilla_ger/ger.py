@@ -6,6 +6,7 @@ hardcoded CUDA devices, implicit validation splits, and label-dependent inferenc
 import argparse
 import json
 from pathlib import Path
+import time
 import torch
 from datasets import Dataset
 from peft import LoraConfig, PeftModel, get_peft_model, prepare_model_for_kbit_training
@@ -89,10 +90,13 @@ class GerTrainer(CheckpointResumeMixin, Trainer):
         was_training = self.model.training
         self.model.eval()
         pairs = []
+        predictions = []
         for row in self.raw_dev:
             prediction = generate_text(self.model, self.processing_class, self.h2t_prompter, row,
                                        self.one_best, self.eval_beams, self.eval_max_new_tokens)
             pairs.append((normalize_text(row["output"]), normalize_text(prediction)))
+            predictions.append({"utt_id": row["utt_id"], "prediction": prediction})
+        write_jsonl(Path(self.args.output_dir) / f"dev-step-{self.state.global_step}.jsonl", predictions)
         metrics[f"{metric_key_prefix}_wer"] = corpus_wer(pairs)["wer_percent"]
         self.log({f"{metric_key_prefix}_wer": metrics[f"{metric_key_prefix}_wer"]})
         self.model.train(was_training)
@@ -108,6 +112,7 @@ def train(base_model: str, data_path: str, output_dir: str,
           seed: int = 42, warmup_steps: int = 100, max_steps: int = -1,
           gradient_checkpointing: bool = True, resume_from_checkpoint: str = None,
           eval_beams: int = 4, eval_max_new_tokens: int = 256):
+    started = time.perf_counter()
     if batch_size < micro_batch_size or micro_batch_size < 1 or batch_size % micro_batch_size:
         raise ValueError("batch_size must be a positive multiple of micro_batch_size")
     import os
@@ -132,15 +137,22 @@ def train(base_model: str, data_path: str, output_dir: str,
     model = load_base(base_model, quantization_bits, device, model_revision)
     resolved_revision = getattr(model.config, "_commit_hash", None) or model_revision
     if quantization_bits:
-        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=gradient_checkpointing)
+        model = prepare_model_for_kbit_training(
+            model, use_gradient_checkpointing=gradient_checkpointing,
+            gradient_checkpointing_kwargs={"use_reentrant": False})
     elif gradient_checkpointing:
         model.gradient_checkpointing_enable(gradient_checkpointing_kwargs={"use_reentrant": False})
         model.enable_input_require_grads()
     config = LoraConfig(r=lora_r, lora_alpha=lora_alpha,
                         target_modules=lora_target_modules or ["q_proj", "k_proj", "v_proj", "o_proj"],
-                        lora_dropout=lora_dropout, bias="none", task_type="CAUSAL_LM")
+                        lora_dropout=lora_dropout, bias="none", task_type="CAUSAL_LM",
+                        revision=resolved_revision)
     model = get_peft_model(model, config)
     model.config.use_cache = False
+    trainable_parameters, total_parameters = model.get_nb_trainable_parameters()
+    only_lora_trainable = all("lora_" in name for name, parameter in model.named_parameters() if parameter.requires_grad)
+    if not trainable_parameters or not only_lora_trainable:
+        raise ValueError("Expected only nonempty LoRA adapter parameters to be trainable")
     model.print_trainable_parameters()
     output_dir = str(resolve_path(output_dir))
     args = TrainingArguments(output_dir=output_dir, per_device_train_batch_size=micro_batch_size,
@@ -158,7 +170,7 @@ def train(base_model: str, data_path: str, output_dir: str,
                          processing_class=tokenizer, raw_dev=dev, h2t_prompter=prompter, one_best=one_best,
                          eval_beams=eval_beams, eval_max_new_tokens=eval_max_new_tokens,
                          data_collator=DataCollatorForSeq2Seq(tokenizer, padding=True, label_pad_token_id=-100))
-    trainer.train(resume_from_checkpoint=resume_from_checkpoint)
+    training_result = trainer.train(resume_from_checkpoint=resume_from_checkpoint)
     trainer.save_model(output_dir)
     tokenizer.save_pretrained(output_dir)
     trainer.save_state()
@@ -173,7 +185,20 @@ def train(base_model: str, data_path: str, output_dir: str,
                 "train_sha256": sha256_file(resolve_path(data_path)),
                 "dev_sha256": sha256_file(resolve_path(validation_path)) if validation_path else None,
                 "best_checkpoint": trainer.state.best_model_checkpoint,
-                "best_dev_wer": trainer.state.best_metric}
+                "best_dev_wer": trainer.state.best_metric,
+                "model_type": model.config.model_type,
+                "trainable_parameters": trainable_parameters,
+                "total_parameters": total_parameters,
+                "only_lora_trainable": only_lora_trainable,
+                "frozen_embedding_dtype": str(model.get_input_embeddings().weight.dtype),
+                "gradient_checkpointing": gradient_checkpointing,
+                "gradient_checkpointing_use_reentrant": False if gradient_checkpointing else None,
+                "train_metrics": training_result.metrics,
+                "wall_runtime_sec": time.perf_counter() - started}
+    model_device = next(model.parameters()).device
+    if model_device.type == "cuda":
+        metadata["cuda_peak_allocated_bytes"] = torch.cuda.max_memory_allocated(model_device)
+        metadata["cuda_peak_reserved_bytes"] = torch.cuda.max_memory_reserved(model_device)
     # PEFT configuration contains sets/enums; normalize to JSON primitives.
     metadata = json.loads(json.dumps(metadata, default=lambda value: sorted(value) if isinstance(value, set) else str(value)))
     write_json(Path(output_dir) / "training_metadata.json", metadata)
@@ -203,6 +228,9 @@ def inference_main():
     tokenizer = AutoTokenizer.from_pretrained(checkpoint)
     bits = metadata["quantization_bits"] if args.quantization_bits is None else args.quantization_bits
     model = load_base(metadata["base_model"], bits, args.device, metadata["model_revision"])
+    if bits:
+        # Match k-bit training's FP32 nonquantized weights without enabling gradients/checkpointing.
+        model = prepare_model_for_kbit_training(model, use_gradient_checkpointing=False)
     model = PeftModel.from_pretrained(model, str(checkpoint))
     model.eval()
     prompter = prompter_class()()

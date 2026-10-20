@@ -1,0 +1,300 @@
+{
+  "checked_at": "2026-10-20T21:41:40+08:00",
+  "scope": "Initial cloud preflight; base environment, local paths and HTTP metadata only. Project environment, model inference and quantized training are not validated.",
+  "repository": {
+    "root": "/home/featurize/work/Vanilla-GER",
+    "commit": "e180d61c571b681a49b8ab41d4c88dcc09123eaf",
+    "branch": "main",
+    "initial_worktree_clean": true,
+    "missing_tutorial_history": ""
+  },
+  "system": {
+    "platform": "Linux-5.15.0-105-generic-x86_64-with-glibc2.35",
+    "architecture": "x86_64",
+    "cpu_count": 6,
+    "cpu_affinity_count": 6,
+    "MemTotal": 59676164096,
+    "MemAvailable": 56990732288
+  },
+  "python": {
+    "executable": "/environment/miniconda3/bin/python",
+    "version": "3.11.8 (main, Feb 26 2024, 21:39:34) [GCC 11.2.0]",
+    "conda_default_env": "base",
+    "conda_prefix": "/environment/miniconda3"
+  },
+  "conda_environments": {
+    "exit_code": 0,
+    "stdout": "{\n  \"envs\": [\n    \"/environment/miniconda3\",\n    \"/environment/miniconda3/envs/system\"\n  ]\n}",
+    "stderr": ""
+  },
+  "tools": {
+    "git": "/usr/bin/git",
+    "curl": "/usr/bin/curl",
+    "ffmpeg": null,
+    "nvcc": null,
+    "conda": "/environment/miniconda3/bin/conda"
+  },
+  "packages": {
+    "torch": "2.2.2",
+    "torchaudio": "2.2.2",
+    "torchvision": "0.17.2",
+    "transformers": null,
+    "peft": null,
+    "accelerate": null,
+    "bitsandbytes": null,
+    "datasets": null,
+    "numpy": "1.26.4",
+    "scipy": null,
+    "soundfile": null,
+    "ffmpeg-python": null,
+    "more-itertools": null,
+    "tqdm": "4.65.0",
+    "fire": null,
+    "pytest": null,
+    "sentencepiece": null,
+    "PyYAML": "6.0.1",
+    "vanilla-ger": null
+  },
+  "gpu": {
+    "nvidia_smi_query": {
+      "exit_code": 0,
+      "stdout": "NVIDIA GeForce RTX 3090, 24576, 1, 610.57.04, 0",
+      "stderr": ""
+    },
+    "nvidia_smi_displayed_cuda_umd": "13.3",
+    "observed_torch_version": "2.2.2+cu121",
+    "observed_torch_cuda_runtime": "12.1",
+    "observed_cuda_available": true,
+    "observed_device_count": 1,
+    "observed_gpu_capability": [
+      8,
+      6
+    ],
+    "cuda_tensor_probe": {
+      "operation": "torch.arange(9, device=cuda).reshape(3,3) @ torch.eye(3, device=cuda); synchronize; compare against original",
+      "passed": true,
+      "result": [
+        [
+          0.0,
+          1.0,
+          2.0
+        ],
+        [
+          3.0,
+          4.0,
+          5.0
+        ],
+        [
+          6.0,
+          7.0,
+          8.0
+        ]
+      ]
+    },
+    "observed_torchaudio_import": "2.2.2+cu121"
+  },
+  "base_pip_check": {
+    "exit_code": 1,
+    "stdout": "nbclassic 0.2.8 has requirement jupyter-server~=1.5, but you have jupyter-server 2.14.0.",
+    "note": "Pre-existing base environment conflict, not a project test failure."
+  },
+  "other_conda_environment": {
+    "name": "system",
+    "python_version": "3.11.5",
+    "project_stack_packages_installed": false,
+    "checked_packages": [
+      "torch",
+      "torchaudio",
+      "transformers",
+      "peft",
+      "accelerate",
+      "bitsandbytes",
+      "soundfile",
+      "datasets",
+      "pytest"
+    ]
+  },
+  "project_paths": {
+    "plan.md": {
+      "exists": true,
+      "is_directory": false
+    },
+    "docs/项目结构与代码学习指南.md": {
+      "exists": true,
+      "is_directory": false
+    },
+    "docs/本地开发与Conda教程.md": {
+      "exists": false,
+      "is_directory": false
+    },
+    "third_party/Hypo2Trans": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/raw/archives": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/raw/voicebank_demand/noisy_trainset_28spk_wav": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/raw/voicebank_demand/trainset_28spk_txt": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/raw/voicebank_demand/noisy_testset_wav": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/raw/voicebank_demand/testset_txt": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/manifests/train.jsonl": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/manifests/dev.jsonl": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/audio_inputs/train.jsonl": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/references/train.jsonl": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/hypotheses": {
+      "exists": false,
+      "is_directory": false
+    },
+    "data/ger": {
+      "exists": false,
+      "is_directory": false
+    },
+    "outputs": {
+      "exists": false,
+      "is_directory": false
+    },
+    ".cache/whisper": {
+      "exists": false,
+      "is_directory": false
+    }
+  },
+  "search_locations": [
+    {
+      "path": "/home/featurize/work",
+      "exists": true,
+      "is_directory": true,
+      "children": [
+        "Vanilla-GER",
+        "openai.chatgpt-26.1007.21434-linux-x64.vsix"
+      ],
+      "disk_total_bytes": 32212254720,
+      "disk_free_bytes": 31843155968
+    },
+    {
+      "path": "/home/featurize/data",
+      "exists": false,
+      "is_directory": false
+    },
+    {
+      "path": "/data",
+      "exists": false,
+      "is_directory": false
+    },
+    {
+      "path": "/datasets",
+      "exists": false,
+      "is_directory": false
+    },
+    {
+      "path": "/mnt",
+      "exists": true,
+      "is_directory": true,
+      "children": [],
+      "disk_total_bytes": 436868911104,
+      "disk_free_bytes": 418352369664
+    },
+    {
+      "path": "/workspace",
+      "exists": false,
+      "is_directory": false
+    },
+    {
+      "path": "/environment",
+      "exists": true,
+      "is_directory": true,
+      "children": [
+        "apps",
+        "miniconda3"
+      ],
+      "disk_total_bytes": 436868911104,
+      "disk_free_bytes": 418352369664
+    },
+    {
+      "path": "/home/featurize/.cache/huggingface/hub",
+      "exists": false,
+      "is_directory": false
+    },
+    {
+      "path": "/home/featurize/.cache/whisper",
+      "exists": false,
+      "is_directory": false
+    }
+  ],
+  "cache_environment": {
+    "HF_HOME": null,
+    "HF_HUB_CACHE": null,
+    "HUGGINGFACE_HUB_CACHE": null,
+    "TRANSFORMERS_CACHE": null,
+    "XDG_CACHE_HOME": null,
+    "TORCH_HOME": null
+  },
+  "dataset_remote_metadata": [
+    {
+      "name": "noisy_trainset_28spk_wav.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/ecb5a102-bb00-46d3-8af5-40c79823b837/content",
+      "expected_size_bytes": 2830205201,
+      "expected_md5": "1fca9e8bafb8cd069f6653c6d92f9e9c",
+      "local_archive_exists": false,
+      "http_status": 200,
+      "content_length": "2830205201",
+      "accept_ranges": "bytes",
+      "note": "HEAD only; no archive payload was downloaded or checksum-verified on this host."
+    },
+    {
+      "name": "trainset_28spk_txt.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/fb55b5de-c2db-4451-ac0a-134e98011ffa/content",
+      "expected_size_bytes": 6489312,
+      "expected_md5": "48bfcd5945165c60ab9d2f312f4d6e1c",
+      "local_archive_exists": false,
+      "http_status": 200,
+      "content_length": "6489312",
+      "accept_ranges": "bytes",
+      "note": "HEAD only; no archive payload was downloaded or checksum-verified on this host."
+    }
+  ],
+  "historical_reports": {
+    "environment-macos.json": "Historical Mac run; not cloud evidence.",
+    "data_audit.json": "Historical 11572 samples; cloud data folders absent.",
+    "downloads.json": "Historical checksums; cloud archive files absent.",
+    "asr-smoke.json": "Historical Mac smoke result; not rerun on this host."
+  },
+  "not_yet_validated": [
+    "Project-specific Linux Conda environment",
+    "Full project tests on cloud",
+    "FFmpeg audio decoding/resampling",
+    "Local dataset integrity and split regeneration",
+    "Whisper CUDA model inference",
+    "bitsandbytes CUDA kernels",
+    "LLaMA weight availability, revision and tokenizer",
+    "LoRA training/save/reload on real model",
+    "large-v2 beam=60 resource use"
+  ],
+  "actions_taken": "Read-only inspection and creation of cloud audit reports; no dependency installation, dataset/model download or training.",
+  "candidate_torch_installation_source": "https://pytorch.org/get-started/previous-versions/#v251"
+}

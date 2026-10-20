@@ -1,0 +1,10 @@
+{
+  "substitutions": 11,
+  "deletions": 4,
+  "insertions": 1,
+  "errors": 16,
+  "reference_words": 49,
+  "utterances": 4,
+  "wer_percent": 32.6530612244898,
+  "normalization_version": "hyporadise-english-plus-number-normalizer-v1"
+}

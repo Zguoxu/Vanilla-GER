@@ -1,0 +1,18 @@
+{
+  "checked_at": "2026-10-20T22:16:38+08:00",
+  "torch": "2.5.1+cu121",
+  "cuda_runtime": "12.1",
+  "cuda_matmul_passed": true,
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "ffmpeg": "/environment/miniconda3/envs/vanilla-ger-asr/bin/ffmpeg",
+  "fixture_source": "third_party/Hypo2Trans/generate_data/whisper/tests/jfk.flac",
+  "source_sample_rate": 44100,
+  "source_channels": 2,
+  "source_duration_sec": 11.0,
+  "decoded_samples": 176000,
+  "decoded_sample_rate": 16000,
+  "decoded_duration_sec": 11.0,
+  "duration_difference_sec": 0.0,
+  "number_normalization": "there are 20 apples",
+  "whisper_source": "/home/featurize/work/Vanilla-GER/third_party/Hypo2Trans/generate_data/whisper/whisper/__init__.py"
+}

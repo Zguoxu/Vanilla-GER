@@ -1,6 +1,7 @@
 {
   "source": "https://doi.org/10.7488/ds/2117",
   "official_train_utterances": 11572,
+  "official_test_utterances": 824,
   "speakers": [
     "p226",
     "p227",
@@ -36,17 +37,41 @@
     "p227"
   ],
   "sample_rates": {
-    "48000": 11572
+    "48000": 12396
   },
   "channels": {
-    "1": 11572
+    "1": 12396
   },
   "audio_hash_overlap": 0,
   "casefolded_exact_text_overlap": 598,
   "normalized_text_overlap": 605,
   "normalization_version": "hyporadise-english-plus-number-normalizer-v1",
-  "test_downloaded": false,
-  "clean_audio_downloaded": false,
+  "test_downloaded": true,
+  "test_prepared": true,
+  "pairwise_overlap": {
+    "train_dev": {
+      "utterance_id_overlap": 0,
+      "speaker_overlap": 0,
+      "audio_hash_overlap": 0,
+      "casefolded_exact_text_overlap": 598,
+      "normalized_text_overlap": 605
+    },
+    "train_test": {
+      "utterance_id_overlap": 0,
+      "speaker_overlap": 0,
+      "audio_hash_overlap": 0,
+      "casefolded_exact_text_overlap": 610,
+      "normalized_text_overlap": 617
+    },
+    "dev_test": {
+      "utterance_id_overlap": 0,
+      "speaker_overlap": 0,
+      "audio_hash_overlap": 0,
+      "casefolded_exact_text_overlap": 181,
+      "normalized_text_overlap": 183
+    }
+  },
+  "clean_audio_downloaded": true,
   "splits": {
     "train": {
       "utterances": 10830,
@@ -91,6 +116,16 @@
       ],
       "min_duration_sec": 1.4858125,
       "max_duration_sec": 12.289395833333334
+    },
+    "test": {
+      "utterances": 824,
+      "hours": 0.5755640162037036,
+      "speakers": [
+        "p232",
+        "p257"
+      ],
+      "min_duration_sec": 1.2375625,
+      "max_duration_sec": 9.768854166666667
     }
   }
 }

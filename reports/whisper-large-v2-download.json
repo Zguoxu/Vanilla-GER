@@ -1,0 +1,12 @@
+{
+  "model": "large-v2",
+  "url": "https://openaipublic.azureedge.net/main/whisper/models/81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524/large-v2.pt",
+  "expected_sha256": "81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524",
+  "upstream_commit": "27824d9da316b34855157dd9f6b80ea47119e804",
+  "status": "verified",
+  "started_at": "2026-10-20T22:52:27+08:00",
+  "path": "/home/featurize/work/Vanilla-GER/.cache/whisper/large-v2.pt",
+  "size_bytes": 3086999982,
+  "sha256": "81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524",
+  "finished_at": "2026-10-20T22:56:15+08:00"
+}

@@ -1,0 +1,56 @@
+{
+  "model": "Qwen/Qwen2.5-7B",
+  "revision": "d149729398750b98c0af14eb82c78cfe92750796",
+  "eos_token_id": 151643,
+  "pad_token_id": 151643,
+  "splits": {
+    "train": {
+      "utterances": 32,
+      "max_tokens": 1212,
+      "over_512": [
+        {
+          "utt_id": "p228_003",
+          "tokens": 1212
+        }
+      ],
+      "longest": [
+        {
+          "utt_id": "p228_003",
+          "tokens": 1212
+        },
+        {
+          "utt_id": "p228_021",
+          "tokens": 196
+        },
+        {
+          "utt_id": "p228_015",
+          "tokens": 194
+        }
+      ],
+      "source_sha256": "d51b40ce781872aa878883f80c1083f802c749f713029bd4f7be950fbff7d76e"
+    },
+    "dev": {
+      "utterances": 4,
+      "max_tokens": 163,
+      "over_512": [],
+      "longest": [
+        {
+          "utt_id": "p226_003",
+          "tokens": 163
+        },
+        {
+          "utt_id": "p226_004",
+          "tokens": 126
+        },
+        {
+          "utt_id": "p226_002",
+          "tokens": 94
+        }
+      ],
+      "source_sha256": "59d647ae72aa46257a3c6a5d8535c8b674b3c226faa3d6d91a80f3ec2dfd4bb2"
+    }
+  },
+  "no_label_keys_in_inference": true,
+  "selected_smoke_cutoff_len": 1280,
+  "reason": "Keep the full 1212-token repeated-candidate training example p228_003; do not truncate its answer."
+}

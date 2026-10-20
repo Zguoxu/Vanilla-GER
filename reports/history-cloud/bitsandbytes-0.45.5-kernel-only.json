@@ -1,0 +1,28 @@
+{
+  "checked_at": "2026-10-20T22:49:11+08:00",
+  "torch": "2.5.1+cu121",
+  "cuda_runtime": "12.1",
+  "bitsandbytes": "0.45.5",
+  "gpu": "NVIDIA GeForce RTX 3090",
+  "compiled_with_cuda": true,
+  "kernels": {
+    "int8": {
+      "output_shape": [
+        2,
+        32
+      ],
+      "output_finite": true,
+      "input_gradient_finite": true,
+      "passed": true
+    },
+    "nf4": {
+      "output_shape": [
+        2,
+        32
+      ],
+      "output_finite": true,
+      "input_gradient_finite": true,
+      "passed": true
+    }
+  }
+}

@@ -1,0 +1,134 @@
+{
+  "checked_at": "2026-10-21T00:32:57.979712+08:00",
+  "status": "passed",
+  "groups": {
+    "official_train_28spk": {
+      "clean_directory": "data/raw/voicebank_demand/clean_trainset_28spk_wav",
+      "noisy_directory": "data/raw/voicebank_demand/noisy_trainset_28spk_wav",
+      "clean_files": 11572,
+      "noisy_files": 11572,
+      "paired_files": 11572,
+      "ids_match": true,
+      "speakers": [
+        "p226",
+        "p227",
+        "p228",
+        "p230",
+        "p231",
+        "p233",
+        "p236",
+        "p239",
+        "p243",
+        "p244",
+        "p250",
+        "p254",
+        "p256",
+        "p258",
+        "p259",
+        "p267",
+        "p268",
+        "p269",
+        "p270",
+        "p273",
+        "p274",
+        "p276",
+        "p277",
+        "p278",
+        "p279",
+        "p282",
+        "p286",
+        "p287"
+      ],
+      "sample_rates": {
+        "48000": 11572
+      },
+      "channels": {
+        "1": 11572
+      },
+      "hours": 9.391230619212939,
+      "format_and_frame_mismatches": 0
+    },
+    "official_test": {
+      "clean_directory": "data/raw/voicebank_demand/clean_testset_wav",
+      "noisy_directory": "data/raw/voicebank_demand/noisy_testset_wav",
+      "clean_files": 824,
+      "noisy_files": 824,
+      "paired_files": 824,
+      "ids_match": true,
+      "speakers": [
+        "p232",
+        "p257"
+      ],
+      "sample_rates": {
+        "48000": 824
+      },
+      "channels": {
+        "1": 824
+      },
+      "hours": 0.5755640162037036,
+      "format_and_frame_mismatches": 0
+    }
+  },
+  "clean_files_by_experiment_split": {
+    "train": 10830,
+    "dev": 742,
+    "test": 824
+  },
+  "total_clean_files": 12396,
+  "problems": [],
+  "archives": [
+    {
+      "name": "clean_trainset_28spk_wav.zip",
+      "url": "https://huggingface.co/datasets/mrfakename/noisy-speech-files/resolve/02bc68c5ad97ca55b9b7f3a7edd101585b0434e3/clean_trainset_28spk_wav.zip",
+      "size_bytes": 2486057279,
+      "md5": "d2d5a45ec32f8fcbf201bde0447e20ba",
+      "official_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/245452b6-6235-44b6-a6f9-e7eb19797769/content",
+      "expected_sha256": "dbb13b9ffe752c58764d75de272706a2b467744f33455cec6deb2b12ca01df66",
+      "mirror_revision": "02bc68c5ad97ca55b9b7f3a7edd101585b0434e3",
+      "sha256": "dbb13b9ffe752c58764d75de272706a2b467744f33455cec6deb2b12ca01df66",
+      "uncompressed_bytes": 3246118470
+    },
+    {
+      "name": "clean_testset_wav.zip",
+      "url": "https://huggingface.co/datasets/mrfakename/noisy-speech-files/resolve/02bc68c5ad97ca55b9b7f3a7edd101585b0434e3/clean_testset_wav.zip",
+      "size_bytes": 154332064,
+      "md5": "34eb1c0ba7ef667e9b966866c542fc16",
+      "official_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/dec213d3-bf57-4777-9663-c24bdce92d5e/content",
+      "expected_sha256": "b60bfc2b9df38466d8eb45057c087c6e5dee196c67a0ed7bca628ae2a8611c4e",
+      "mirror_revision": "02bc68c5ad97ca55b9b7f3a7edd101585b0434e3",
+      "sha256": "b60bfc2b9df38466d8eb45057c087c6e5dee196c67a0ed7bca628ae2a8611c4e",
+      "uncompressed_bytes": 198951180
+    }
+  ],
+  "existing_input_sha256": {
+    "data/manifests/train.jsonl": "76f26bc128967e69d951ee422a511e7b4fa3fd43fefb06178f4b6bd510f6c466",
+    "data/manifests/dev.jsonl": "29df112594640053682baed7dc62186e39794ee8bbfd501ce1ec5aab1c37b7d3",
+    "data/manifests/test.jsonl": "a9c77cafd2fdc4fb9b9aa8da140c8d0f200010d799008820e12d5eb542b5f522",
+    "data/audio_inputs/train.jsonl": "57486484893ed4d360480de7eccda6c63424728f22bf360f387ba2edac944cb1",
+    "data/audio_inputs/dev.jsonl": "4712879bbe1e53b27f94aff2d67f4a9e8399077aaede808f72e646558252cde9",
+    "data/audio_inputs/test.jsonl": "4ff3b5d015e46c6c990a9c17449e2ca8984a5a1c0a1069a9b2e561efec646c33",
+    "data/references/train.jsonl": "83fbd4cda1e9baaacf89c358428d62da2aacb3bb5c8a777a5a3d59f180fb6370",
+    "data/references/dev.jsonl": "3b4bbddf0032e6ab29b64431a6f2a9c7f45da3ad0f046340f51e719164c64bdb",
+    "data/references/test.jsonl": "e5949c5c00854a035ca109a6540004efa97100f168033ffda11113fab154ca00"
+  },
+  "unchanged_preexisting_inputs": {
+    "data/manifests/train.jsonl": true,
+    "data/manifests/dev.jsonl": true,
+    "data/manifests/test.jsonl": true,
+    "data/audio_inputs/train.jsonl": true,
+    "data/audio_inputs/dev.jsonl": true,
+    "data/audio_inputs/test.jsonl": true,
+    "data/references/train.jsonl": true,
+    "data/references/dev.jsonl": true,
+    "data/references/test.jsonl": true
+  },
+  "data_audit_clean_audio_downloaded": true,
+  "source_sha256": {
+    "configs/downloads.json": "8989795ff8614708bb2880030994100c45f1cb9f5fe8b22591c26914fb4234fd",
+    "configs/download-mirrors.json": "a1709335071c48e1e2b3eb5d246f8873f2a9e6be0bd7ee16a93407637b72642e",
+    "scripts/check_clean_pairs.py": "3b883ac4f826f6c5acaf2528e941702fa65b3a1efbd429ede1f766b3eecf568e",
+    "reports/downloads.json": "f3c47103e1bc8897f0bd04f2f35367617f5746064a3cafac5a0e6cf97f97893d",
+    "reports/data_audit.json": "c84c88e44e88de2df5b02f90fdb546207f069a2aa10562805058f268533d6c38",
+    "reports/voicebank-clean-source-metadata.json": "dcef6d674b9ca9a42d06c48a9e2ca5f56c9cd5839abd76880fd0687e8b7d0ba9"
+  }
+}

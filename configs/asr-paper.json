@@ -7,5 +7,5 @@
   "task": "transcribe",
   "temperature": 0.0,
   "without_timestamps": true,
-  "purpose": "Target cloud setting; CUDA memory/time validation still required"
+  "purpose": "Formal train/dev/test candidate generation; RTX 3090 beam60 smoke validated, full runs recorded separately"
 }

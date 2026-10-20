@@ -1,0 +1,19 @@
+{
+  "checked_at": "2026-10-20T23:30:24+08:00",
+  "base_model": "Qwen/Qwen2.5-7B",
+  "revision": "d149729398750b98c0af14eb82c78cfe92750796",
+  "quantization_bits": 8,
+  "training_examples": 32,
+  "dev_examples": 4,
+  "global_step": 8,
+  "trainable_parameters": 5046272,
+  "only_lora_trainable": true,
+  "losses_and_gradients_finite": true,
+  "nonzero_lora_B_tensors": 112,
+  "fresh_process_predictions_identical": true,
+  "validation_wer_percent": 32.6530612244898,
+  "train_runtime_sec": 51.5025,
+  "cuda_peak_allocated_bytes": 20421150208,
+  "cuda_peak_reserved_bytes": 21590179840,
+  "adapter_sha256": "024c9f45573bb2a63c80c3f3b1a1000538748bc4594e29cfe274f1857946f394"
+}

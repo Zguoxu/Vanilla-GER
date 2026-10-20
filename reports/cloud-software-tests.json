@@ -1,0 +1,15 @@
+{
+  "command": "conda run --no-capture-output -n vanilla-ger-train python -m pytest -q -W error::FutureWarning",
+  "result": "15 passed, 6 warnings in 66.20s",
+  "architectures": [
+    "LlamaForCausalLM",
+    "Qwen2ForCausalLM"
+  ],
+  "gpu_checks": [
+    "INT8 LoRA updates",
+    "INT8 fresh-process inference equals training-time predictions"
+  ],
+  "whisper_check": "Cached cross-attention equals uncached output and projects audio once.",
+  "warnings": "Six UserWarning messages describe the INT8 operator casting FP32 input to FP16. FutureWarning remains an error.",
+  "scope": "Miniature random-model software/CUDA tests; full Qwen 7B result is recorded separately."
+}

@@ -1,0 +1,109 @@
+{
+  "groups": {
+    "(root)": {
+      "bytes": 51974,
+      "files": 10
+    },
+    "requirements": {
+      "bytes": 39379,
+      "files": 9
+    },
+    "patches": {
+      "bytes": 23865,
+      "files": 1
+    },
+    "tests": {
+      "bytes": 45801,
+      "files": 4
+    },
+    "licenses": {
+      "bytes": 2139,
+      "files": 2
+    },
+    "configs": {
+      "bytes": 5580,
+      "files": 7
+    },
+    "third_party": {
+      "bytes": 5944973,
+      "files": 100
+    },
+    "src": {
+      "bytes": 79547,
+      "files": 20
+    },
+    "reports": {
+      "bytes": 112673,
+      "files": 43
+    },
+    ".pytest_cache": {
+      "bytes": 1817,
+      "files": 6
+    },
+    "data": {
+      "bytes": 12549875953,
+      "files": 49627
+    },
+    ".cache": {
+      "bytes": 3162611688,
+      "files": 25
+    },
+    "docs": {
+      "bytes": 45055,
+      "files": 2
+    },
+    "scripts": {
+      "bytes": 57333,
+      "files": 18
+    },
+    "outputs": {
+      "bytes": 225586689,
+      "files": 57
+    }
+  },
+  "large_files": [
+    {
+      "path": ".cache/whisper/large-v2.pt",
+      "bytes": 3086999982
+    },
+    {
+      "path": "data/raw/archives/noisy_trainset_28spk_wav.zip",
+      "bytes": 2830205201
+    },
+    {
+      "path": "data/raw/archives/clean_trainset_28spk_wav.zip",
+      "bytes": 2486057279
+    },
+    {
+      "path": "data/raw/archives/noisy_testset_wav.zip",
+      "bytes": 170578854
+    },
+    {
+      "path": "data/raw/archives/clean_testset_wav.zip",
+      "bytes": 154332064
+    },
+    {
+      "path": ".cache/whisper/tiny.en.pt",
+      "bytes": 75571315
+    }
+  ],
+  "nested_git": [
+    "third_party/Hypo2Trans/.git"
+  ],
+  "symlinks": [],
+  "sensitive_filenames": [],
+  "gitignore_removed": true,
+  "git_cli_authenticated": true,
+  "git_cli_auth_check": "GitHub CLI authenticated as Zguoxu; repository push permission verified.",
+  "github_connector_push_permission": true,
+  "scope": "Files within /home/featurize/work/Vanilla-GER; external model caches and Conda installations are outside this repository.",
+  "total_files_at_inventory": 49931,
+  "total_bytes_at_inventory": 15944484466,
+  "storage_strategy": "Source and reports in Git; complete project directory in multipart GitHub Release.",
+  "release_tag": "full-snapshot-2026-10-21",
+  "release_url": "https://github.com/Zguoxu/Vanilla-GER/releases/tag/full-snapshot-2026-10-21",
+  "credential_scan": {
+    "text_files_scanned": 25006,
+    "findings": []
+  }
+}

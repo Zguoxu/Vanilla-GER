@@ -1,0 +1,33 @@
+{
+  "python": "3.10.22 | packaged by conda-forge | (main, Oct  6 2026, 23:02:24) [GCC 14.4.0]",
+  "executable": "/environment/miniconda3/envs/vanilla-ger-asr/bin/python",
+  "platform": "Linux-5.15.0-105-generic-x86_64-with-glibc2.35",
+  "architecture": "x86_64",
+  "cuda_available": true,
+  "torch_cuda": "12.1",
+  "mps_available": false,
+  "ffmpeg": "/environment/miniconda3/envs/vanilla-ger-asr/bin/ffmpeg",
+  "packages": {
+    "torch": "2.5.1+cu121",
+    "torchaudio": "2.5.1+cu121",
+    "transformers": "4.46.3",
+    "peft": null,
+    "numpy": "1.26.4",
+    "soundfile": "0.13.1",
+    "datasets": null,
+    "accelerate": null,
+    "bitsandbytes": null
+  },
+  "missing_packages": [
+    "peft",
+    "datasets",
+    "accelerate",
+    "bitsandbytes"
+  ],
+  "gpu": [
+    {
+      "name": "NVIDIA GeForce RTX 3090",
+      "total_memory_bytes": 25295323136
+    }
+  ]
+}

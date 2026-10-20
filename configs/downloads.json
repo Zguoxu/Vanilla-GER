@@ -1,5 +1,5 @@
 {
-  "dataset": "VoiceBank-DEMAND, 28-speaker training subset",
+  "dataset": "VoiceBank-DEMAND, clean/noisy 28-speaker training subset and official test with transcripts",
   "source": "https://doi.org/10.7488/ds/2117",
   "files": [
     {
@@ -13,6 +13,30 @@
       "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/fb55b5de-c2db-4451-ac0a-134e98011ffa/content",
       "size_bytes": 6489312,
       "md5": "48bfcd5945165c60ab9d2f312f4d6e1c"
+    },
+    {
+      "name": "noisy_testset_wav.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/13c1bfbf-14a6-41db-9b41-8f7310f01ad5/content",
+      "size_bytes": 170578854,
+      "md5": "fb1b86caa31e8ba5b506c0c64da9aab5"
+    },
+    {
+      "name": "testset_txt.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/09e12592-879e-4749-bf6d-e34cf0d1ddf6/content",
+      "size_bytes": 440277,
+      "md5": "6ca8ef3756f3769c05bb694e77ad29f0"
+    },
+    {
+      "name": "clean_trainset_28spk_wav.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/245452b6-6235-44b6-a6f9-e7eb19797769/content",
+      "size_bytes": 2486057279,
+      "md5": "d2d5a45ec32f8fcbf201bde0447e20ba"
+    },
+    {
+      "name": "clean_testset_wav.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/dec213d3-bf57-4777-9663-c24bdce92d5e/content",
+      "size_bytes": 154332064,
+      "md5": "34eb1c0ba7ef667e9b966866c542fc16"
     }
   ]
 }

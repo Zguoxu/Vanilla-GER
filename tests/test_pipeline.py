@@ -13,6 +13,31 @@ from vanilla_ger.upstream import prompter_class, normalize_text
 from vanilla_ger.asr import select_candidates
 
 
+def test_whisper_cross_attention_reuses_projected_audio():
+    from vanilla_ger.upstream import whisper_module
+    attention = whisper_module().model.MultiHeadAttention(16, 2).eval()
+    audio = torch.randn(1, 7, 16)
+    queries = [torch.randn(1, 1, 16), torch.randn(1, 1, 16)]
+    cache, calls = {}, {attention.key: 0, attention.value: 0}
+
+    def remember(module, inputs, output):
+        calls[module] += 1
+        cache[module] = output
+
+    hooks = [module.register_forward_hook(remember) for module in calls]
+    try:
+        with torch.no_grad():
+            attention(queries[0], audio, kv_cache=cache)
+            cached = attention(queries[1], audio, kv_cache=cache)
+        assert list(calls.values()) == [1, 1]
+    finally:
+        for hook in hooks:
+            hook.remove()
+    with torch.no_grad():
+        uncached = attention(queries[1], audio)
+    torch.testing.assert_close(cached, uncached)
+
+
 def test_corpus_weighting_empty_predictions_and_id_checks():
     result = corpus_wer([("a b c d e f g h i j", "a b c d e f g h i x"), ("yes", "")])
     assert result["errors"] == 2
@@ -71,6 +96,33 @@ def test_manifest_joins_by_id_and_does_not_require_clean(tmp_path, monkeypatch):
     assert train[0]["ref_text"] == "transcript for a_001"
     inputs = read_records(tmp_path / "data/audio_inputs/train.jsonl")
     assert not any("ref_text" in row for row in inputs)
+    # Preparing official test must not alter either existing training split.
+    before = {name: (tmp_path / "manifests" / f"{name}.jsonl").read_bytes()
+              for name in ["train", "dev"]}
+    test_text = raw / "testset_txt"
+    test_text.mkdir()
+    test_label = test_text / "test_001.txt"
+    test_label.write_text("held out reference")
+    options = dict(dev_speakers=["b"], expected_speakers=3, include_test=True,
+                   expected_test_utterances=1, expected_test_speakers=["test"])
+    report = data.prepare(raw, tmp_path / "manifests", **options)
+    assert report["official_train_utterances"] == 3
+    assert report["splits"]["test"]["utterances"] == 1
+    assert all(pair["audio_hash_overlap"] == 0 for pair in report["pairwise_overlap"].values())
+    for name, content in before.items():
+        assert (tmp_path / "manifests" / f"{name}.jsonl").read_bytes() == content
+    test_inputs = read_records(tmp_path / "data/audio_inputs/test.jsonl")
+    assert set(test_inputs[0]) == {"utt_id", "noisy_path", "audio_sha256"}
+    test_rows = read_records(tmp_path / "manifests/test.jsonl")
+    assert test_rows[0]["source_split"] == "official_test"
+    assert test_rows[0]["ref_text"] == "held out reference"
+    test_label.unlink()
+    with pytest.raises(ValueError, match="No .txt files"):
+        data.prepare(raw, tmp_path / "manifests", **options)
+    test_label.write_text("held out reference")
+    (extra / "test_001.wav").write_bytes((wave_dir / "a_001.wav").read_bytes())
+    with pytest.raises(ValueError, match="overlap across train/test"):
+        data.prepare(raw, tmp_path / "manifests", **options)
     (text_dir / "a_001.txt").unlink()
     with pytest.raises(ValueError, match="ID mismatch"):
         data.prepare(raw, tmp_path / "other", dev_speakers=["b"], expected_speakers=3)
@@ -90,25 +142,29 @@ def test_h2t_export_matches_ids_and_separates_inference_labels():
         module.build(hyp[:1], refs)
 
 
-@pytest.fixture
-def tiny_base(tmp_path):
+@pytest.fixture(params=["llama", "qwen2"])
+def tiny_base(tmp_path, request):
     from tokenizers import Tokenizer
     from tokenizers.models import WordLevel
     from tokenizers.pre_tokenizers import Whitespace
-    from transformers import LlamaConfig, LlamaForCausalLM, PreTrainedTokenizerFast
+    from transformers import (LlamaConfig, LlamaForCausalLM, Qwen2Config,
+                              Qwen2ForCausalLM, PreTrainedTokenizerFast)
     torch.set_num_threads(1)
     vocab = {word: i for i, word in enumerate(["<pad>", "<s>", "</s>", "<unk>", "hello", "world", "good", "day", "Response", "Best", "hypothesis"])}
     backend = Tokenizer(WordLevel(vocab, unk_token="<unk>"))
     backend.pre_tokenizer = Whitespace()
     tokenizer = PreTrainedTokenizerFast(tokenizer_object=backend, bos_token="<s>", eos_token="</s>", pad_token="<pad>", unk_token="<unk>")
     tokenizer.model_input_names = ["input_ids", "attention_mask"]
-    base = tmp_path / "tiny-random-llama"
+    config_class, model_class = {"llama": (LlamaConfig, LlamaForCausalLM),
+                                  "qwen2": (Qwen2Config, Qwen2ForCausalLM)}[request.param]
+    base = tmp_path / f"tiny-random-{request.param}"
     tokenizer.save_pretrained(base)
     torch.manual_seed(7)
-    config = LlamaConfig(vocab_size=len(vocab), hidden_size=16, intermediate_size=32,
+    # INT8 CUDA kernels use 32-element tiles; keep the fixture aligned as well.
+    config = config_class(vocab_size=len(vocab), hidden_size=32, intermediate_size=64,
                          num_hidden_layers=1, num_attention_heads=2, num_key_value_heads=2,
                          max_position_embeddings=1024, bos_token_id=1, eos_token_id=2, pad_token_id=0)
-    LlamaForCausalLM(config).save_pretrained(base)
+    model_class(config).save_pretrained(base)
     return base, tokenizer
 
 
@@ -168,3 +224,33 @@ def test_real_lora_update_save_reload_and_label_free_cli(tiny_base, tmp_path):
                     resume_from_checkpoint=str(output / "checkpoint-2"))
     assert json.loads((output / "trainer_state.json").read_text())["global_step"] == 3
     assert resumed["best_dev_wer"] is not None
+
+
+@pytest.mark.skipif(not torch.cuda.is_available(), reason="CUDA quantized LoRA integration")
+def test_int8_lora_updates_on_cuda(tiny_base, tmp_path):
+    pytest.importorskip("bitsandbytes")
+    from safetensors.torch import load_file
+    from vanilla_ger.ger import train
+    base, _ = tiny_base
+    data = tmp_path / "cuda-train.json"
+    write_json(data, [{"utt_id": "cuda-1", "input1": "hello world", "input2": "hello day", "output": "good day"}])
+    dev = tmp_path / "cuda-dev.json"
+    write_json(dev, [{"utt_id": "cuda-dev-1", "input1": "hello world", "input2": "hello day", "output": "good day"}])
+    output = tmp_path / "cuda-adapter"
+    metadata = train(str(base), str(data), str(output), validation_path=str(dev), device="cuda", quantization_bits=8,
+                     batch_size=1, micro_batch_size=1, max_steps=2, warmup_steps=0,
+                     lora_r=2, lora_alpha=4, gradient_checkpointing=True,
+                     eval_beams=1, eval_max_new_tokens=4)
+    weights = load_file(str(output / "adapter_model.safetensors"))
+    assert any(torch.count_nonzero(value) for name, value in weights.items() if "lora_B" in name)
+    assert metadata["only_lora_trainable"]
+    assert metadata["cuda_peak_allocated_bytes"] > 0
+    inputs = tmp_path / "cuda-inputs.json"
+    write_json(inputs, [{"utt_id": "cuda-dev-1", "input1": "hello world", "input2": "hello day"}])
+    predictions = tmp_path / "cuda-predictions.jsonl"
+    result = subprocess.run([sys.executable, str(ROOT / "scripts/infer_ger.py"),
+                             "--checkpoint", str(output), "--inputs", str(inputs),
+                             "--output", str(predictions), "--device", "cuda"],
+                            capture_output=True, text=True, timeout=120)
+    assert result.returncode == 0, result.stderr
+    assert read_records(predictions) == read_records(output / "dev-step-2.jsonl")

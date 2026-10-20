@@ -405,37 +405,37 @@ index 9c1f7e8..a76d034 100644
 +if __name__ == "__main__":
 +    inference_main()
 diff --git a/H2T-LoRA/utils/__pycache__/prompter.cpython-310.pyc b/H2T-LoRA/utils/__pycache__/prompter.cpython-310.pyc
-index 381403e18fd96f218e14225c50c53ad65dcd904b..03919da50c25d32dc13332da24ae96ab34d9f201 100644
+index 381403e18fd96f218e14225c50c53ad65dcd904b..e8a7517108dc1e8004dca619d0435512acc3ed2f 100644
 GIT binary patch
-delta 950
-zcmZ8gO-~a+7@n_fw@XVfd?dxMViZydX=prXJQ#yUOiT~u!-$8?!Yr`0-QCPgBam%~
-z_GW?x_ee-+y!bynd+^|8|A65y2!ih{BF34#&&)jY&b#mX%<NJAO@ARM6f6Yo(~s|s
-zue*gWINbd<F_1I)AkVp3Zn|uh6w&U<yX_o!&49_z01=6hjUp_w9Cxt72Lz1%F{X?j
-z)}50G?;%e2Nso5)ZYH8VEXP%rvxx4YebU8mu`(mt#UJ`ROyv%&i1jeU?t6|nV$i!3
-zBj21xGxGjxjFIjyz#`N@qOS7XNI#K*bsx_b5d>vj@Z)GMwX#{;GH0vvQ_q6>!}tz)
-zI#mz`6p+wBh6!r~o}Xm7Cw!;nCRt}$hK^cKOxs@dnyzif@5$m^5&VDJl?CYvS=m}^
-z2OI6mqhO`oa(yK$?nWp)J*_M{zSnFzr6-T;6}9dOZikLgo0ZwkFsRN8$Cs7AnH1<G
-z9*^(Q+rx(Ehi#P@O=sC{CYf|qjXU(lc3lfiWnS0HaS=6e1d{IH4)d*)qi0-1Iolx}
-z77>oxSd=2R2N$H}1r9Zcm{2rIRf*UfDjT(>flvgkP}%EMWlt}=Qk8MS^!V@2g6*eU
-zM3l5(nLw?B0A(gvx?BxJ%TcMAVi=gRAx2;jS2SGJa19`#!j(cRcm|{KDjVw~*gUl;
-z!<kbv{>bibQ`py0)Ayy1otNB!7j%H3Fw!F&$~_=GxY#nQE%ig(Fz}^o%dqLGLky=5
-zPob6RS%OB&Cx%qQ3xQ0Ny9HiJrsarNuDHnRx){}be$7?(dDv-Sq|V90L-Cw3MrbW=
-z8xPhl10{%tn;IrHT$Gp2bTFYy(tnmL0hoy4Awn(@OfWmP2syDR`DHP3ObqL2WH|LM
-Z=aQ^#^I*lc#b8{_R0sZ#8^6qyegiKQ?hpU~
+delta 937
+zcmZ8g%}*0S6rZo%ZkLu|_(+OhU=*?v($IL&crb>jn3x_4V#LE{akg|zyStg4hCsH#
+z*qaF&+#?}rZ~h;iJ$N$N|A4zELGaBYYMht%o1Nc#^X9!bv&V(+#bQt_nh3@l@vZq~
+zzxWx4`(I~A@&+H}c{j%mm(@uL?VrBe&4bq>X!HpnCNZ*6jH4XKT`X~*fYRT}q&C1x
+zIEnEA;`ERVXjfVFm=16>BXgX^^Z*@_9)63Z5z`+2Fx+J_-#246zz}=r1>%T-^e9HY
+zv49q%`&$?zB`-l^)I_2t3tY>N&|y8qb0q{pSr7a;TF%rmsyoI~Wo7<ZP<xo%Ay4Ov
+zLW2TQ8bo2rnt|u1IqnJHX}f98S&u?THd4d3>t4&X?c_aKeOv<nAGLBLXuIXQ>&TAq
+zcHHt-AU4aZj_<Wv&is={wX$q@g4>}Z<aT*!I}9o-!ttZ>pTmoE4$ma_=<RXM^TUoz
+zwU)E)wo*M?Rgx~fv0GEUrBOkZ$8iZYaSUDD!(HZ^8As2#m~ys9x-2Ffb+DL<*#X>%
+z>L_riNyMzAan^{KEh9^-u8o8uXou2nRHVJI?nctWDO2;mmglygnTVKDJ<<c&a7AP>
+z!LnsN5N$_h{S)KBSelrCNnBBIRlzlYlnOTzs%hsinbg_z5W&WoNg3A9jN~J`yGy~Y
+zqGnG@ZM!JB3y-Fcp)fKa9LnvJ0o<j<s%yg#Hw^s9wWF}*$s-KAj?Q3M^gKZ=<5Mk?
+z!V7`SlDh?7sor+PrYrttbzMv<zOdm+`y%WDFp<j1#AC^_Hce<X>1Yo&E(0Zqf}0BF
+z6#OkO`%=M#DoOoJ(G-Az7#<_!62Szs6O)irlaik%BPT>Nk0-`6Z!4eXY?}wKZCi{c
+OCA~88f86AiKJ^P=f9RP2
 
-delta 816
-zcmZ8f&ubGw6rMLTyV;~ot*x|8m0CrSRZ7}|peIo;^^!|PF_&e{Z0&|*cbT0c!i1v1
-zi%_Jlw^Ew?Eqd}Mh=)B09{m%v)%s@RFWg~1X1@34oA15ZrxS<c)wo)%5d7ZWyd|FR
-zR^PzJ?)yu&m=@)LXAZpBb})DwXZjjJQ%yXgAuS2$fr0@QRKp$-Y@ZHkk0HY}8$x<U
-zaltj)Bm1-u&p=t4_2K12k1Kmn(tHT0<J>2La2$OGByv_ry7Cx+nDGFoCT$|umQ-0-
-z#T7OZjwsa#it;`t3bI~I*J(6uzmxbaKf6osoUBL-t>!FFlbpBXFv{N1d+rQ!->%j-
-z<8Dw-H^V2(%d6Mxem9QlVXIRg9bf9i($7+M1*WnCc6oj*j8Y}HS}KgA+zO*)OXXI_
-ze;9PKPwf15qv(jN8m9tkqzxK0c4UY4cvLP}Hev<efgbilE@-|-Mt#9OX;XPoF<q3S
-z`8si}MsqxoaW_$3ah*$L4R4Y22+b3}B2iof*OUuI)a8<6JhwMu+4WUXzMMkFwdAxp
-z{YOHcHhD}2sWkl<!EE+{pBv-g99K96`<TD7u5D8c8`0wF=WwB6V4eg_p+gX~Mh0|<
-zFW|C9a{>jEI7$OAO**0a0+{cz+$we>Zx%K(Ot757&>|-M>j1a;_@h91zlAERNTtTa
-zT=vmA2Q>R?-3W{iX-Ik2zy$+;>nK*UhGPikuTB>b9KzugrBf965vBA;h0*U==n=Il
-ehch!pu3OGao+sj#=gG<Jz+RpFUp4z|Fa89fOuRP$
+delta 843
+zcmZ8f&ubGw6rMLTyV;~ot*x|8mD-9TtJJgwK~JJy>Lr(oVlK;?N$rMYcbT0c!i0dq
+zi%_Jlw^B&%{uc_Ow}Pkr4+L*|veo)#<1gG{K4!l6=DqK|w_nSL<K?JaE)o3R-n=EA
+z?Uvub=I+5oTTF{$lcx?m?>T6^jXQaTps6Mv(U24bbV0#@3aVj`2)0j$w9AlTnhha2
+zqqyLj?U8-jho_({&HC_SqRW*%C}=(ejN{xVf^b}Y1|)P=NwWGFfSC0Fw<awj*OygM
+zSa}K?2}cwv1cUNEItsFpZ`Y~SZNDA+4L`k0@0=`23#Dc(O5%*Sq99B^(0lF-a^J32
+zx1vt7nrsD6R#w)oSN%>DR)a>nI(oj`j-;P%vdb`)zGRo?$AU0Xa=W2|D9o%NjJH*0
+zwf%?9c6z|h^=f%XWZ5VcP$4bQps^!6w9CU{&ax3J_zrZjA96wSJu>PG-bstf3ySHy
+z9L+a~Yt`!Gv5Y#g^73>pl@-h)=Mm~Bep$jOH?Auea;wWFM|);(MzZ6pynH!@jBCkh
+z^ZHK+dD{3f*-WJA#|UQAcYJA#gL7Qs6zpT3e&N@86zwKzKKnU5Xc(B8fT?r{f>y|Y
+z4sir7tJNnkVjP7@(@WxZpgsZmyDYQv+en;+oeW~ECs(wH4*yEPYc~F<sl4BTN^3|Z
+zM#NnD-dX~heztD(j1Fl?dDg&r1Ahz2PqT(&2<Ep=77!f5;S{A)6!;OP^hb%&?^x*(
+wwMvIGGr6x@%nF_-qK4<mNqmwOqU1{KtF4S1lw*doRr=bVoBTgt`q5te2`;n6NB{r;
 
 diff --git a/H2T-LoRA/utils/prompter.py b/H2T-LoRA/utils/prompter.py
 index 832188c..a217457 100644
@@ -626,3 +626,18 @@ index 8309896..8e8deaa 100644
          texts = [[text[i] for i in top50] for text, top50 in zip(texts, top50_list)]
  
          return texts
+diff --git a/generate_data/whisper/whisper/model.py b/generate_data/whisper/whisper/model.py
+index 1b5890f..7441b0b 100644
+--- a/generate_data/whisper/whisper/model.py
++++ b/generate_data/whisper/whisper/model.py
+@@ -79,8 +79,8 @@ class MultiHeadAttention(nn.Module):
+             v = self.value(x if xa is None else xa)
+         else:
+             # for cross-attention, calculate keys and values once and reuse in subsequent calls.
+-            k = kv_cache.get(self.key, self.key(xa))
+-            v = kv_cache.get(self.value, self.value(xa))
++            k = kv_cache[self.key] if self.key in kv_cache else self.key(xa)
++            v = kv_cache[self.value] if self.value in kv_cache else self.value(xa)
+ 
+         wv = self.qkv_attention(q, k, v, mask)
+         return self.out(wv)

@@ -1,0 +1,267 @@
+{
+  "recorded_at": "2026-10-20T15:44:44.330639+00:00",
+  "project_root": "/home/featurize/work/Vanilla-GER",
+  "git_head": "e180d61c571b681a49b8ab41d4c88dcc09123eaf",
+  "working_tree_modified": true,
+  "upstream_commit": "27824d9da316b34855157dd9f6b80ea47119e804",
+  "scope": "Verified cloud setup, 32 train/4 dev real Qwen 7B smoke, and 10-utterance large-v2 beam60 timing; full ASR, formal GER and official test are pending.",
+  "pip_check": "No broken requirements found.",
+  "files": {
+    "THIRD_PARTY.md": {
+      "bytes": 3969,
+      "sha256": "0e38af0335804d09fff2c0df38787207dc739eb304ed8f3ca2ce05ac39e7410f"
+    },
+    "configs/asr-paper.json": {
+      "bytes": 256,
+      "sha256": "cbb6305018096e2d8e92a6d9c91bb7448e0cf7f320590f783ed72b22b338d5ec"
+    },
+    "configs/ger-qwen2.5-7b-smoke.json": {
+      "bytes": 744,
+      "sha256": "11f6a9ceedf543310ab443530d52fcff3c521afd5bfb07833c24f17497f0126b"
+    },
+    "configs/ger-qwen2.5-7b.json": {
+      "bytes": 717,
+      "sha256": "b9f8c2d5e165b330e834a824009ed11a8e53b80dfc9ba07a98dc09651f7a0ca5"
+    },
+    "data/audio_inputs/dev.jsonl": {
+      "bytes": 139496,
+      "sha256": "4712879bbe1e53b27f94aff2d67f4a9e8399077aaede808f72e646558252cde9"
+    },
+    "data/audio_inputs/train.jsonl": {
+      "bytes": 2036040,
+      "sha256": "57486484893ed4d360480de7eccda6c63424728f22bf360f387ba2edac944cb1"
+    },
+    "data/ger/cloud-smoke-tiny-32/dev.json": {
+      "bytes": 1253,
+      "sha256": "59d647ae72aa46257a3c6a5d8535c8b674b3c226faa3d6d91a80f3ec2dfd4bb2"
+    },
+    "data/ger/cloud-smoke-tiny-32/train.json": {
+      "bytes": 12842,
+      "sha256": "d51b40ce781872aa878883f80c1083f802c749f713029bd4f7be950fbff7d76e"
+    },
+    "data/hypotheses/large-v2-beam60-probe-10/dev.jsonl": {
+      "bytes": 9433,
+      "sha256": "94b92bca41418282f0647fd0126c2318ecfad6441170d4f930e85c8085829a04"
+    },
+    "data/hypotheses/large-v2-beam60-probe-10/dev.meta.json": {
+      "bytes": 1119,
+      "sha256": "345502360754d2f6e54871c162e7ed38b69ee28e97d1b824ce8916040b68b365"
+    },
+    "data/manifests/dev.jsonl": {
+      "bytes": 300526,
+      "sha256": "29df112594640053682baed7dc62186e39794ee8bbfd501ce1ec5aab1c37b7d3"
+    },
+    "data/manifests/train.jsonl": {
+      "bytes": 4434834,
+      "sha256": "76f26bc128967e69d951ee422a511e7b4fa3fd43fefb06178f4b6bd510f6c466"
+    },
+    "data/references/dev.jsonl": {
+      "bytes": 57975,
+      "sha256": "3b4bbddf0032e6ab29b64431a6f2a9c7f45da3ad0f046340f51e719164c64bdb"
+    },
+    "data/references/train.jsonl": {
+      "bytes": 854799,
+      "sha256": "83fbd4cda1e9baaacf89c358428d62da2aacb3bb5c8a777a5a3d59f180fb6370"
+    },
+    "environment-cloud-asr.yml": {
+      "bytes": 157,
+      "sha256": "81b4d7d4add78d065290a05ce98c5b9de5e428657347fd281789a490f3ceba6d"
+    },
+    "environment-cloud-train.yml": {
+      "bytes": 161,
+      "sha256": "b31138cf717e94fd100d2c2e253627dfe9be0ad7d550a343c6212a6f7b19a631"
+    },
+    "outputs/cloud-smoke-qwen2.5-7b-int8/adapter_config.json": {
+      "bytes": 706,
+      "sha256": "16dd5ecbded4d0ac56a65d811a84c07756630afc1c7073706e92201df33f50f1"
+    },
+    "outputs/cloud-smoke-qwen2.5-7b-int8/dev-predictions.jsonl": {
+      "bytes": 379,
+      "sha256": "a3a45dec7127b341945c44884493e8650c59ee8d0b627909a3694d33e05c83bc"
+    },
+    "outputs/cloud-smoke-qwen2.5-7b-int8/training_metadata.json": {
+      "bytes": 2215,
+      "sha256": "90e29f2e95cbb61300b80694a4611c3c9c2e416fd46e734e603531d052e707f7"
+    },
+    "patches/hypo2trans.patch": {
+      "bytes": 23865,
+      "sha256": "17cb9143c8ae0e14137fa6dfea19db9908b8b277801c31346b0b4e96784f7ece"
+    },
+    "reports/asr-large-v2-beam60-probe-10.json": {
+      "bytes": 486,
+      "sha256": "f784ba29aa729754bc7c3a7b41c86da47f1f7114a7f3f41749a27cc81c893fee"
+    },
+    "reports/bitsandbytes-cuda-check.json": {
+      "bytes": 406,
+      "sha256": "25b83ad041b00e2f6d785b0a8785735eb66d4b7d548ace966c3ac99af6f9dae2"
+    },
+    "reports/cloud-software-tests.json": {
+      "bytes": 674,
+      "sha256": "b829edd56b0b96250d1b7e0410db13e8dd27808edb7755ab3972eeb36050c2ce"
+    },
+    "reports/data_audit.json": {
+      "bytes": 1650,
+      "sha256": "15b721611a370cf6263b6adcf00fde66a46a0301861c7887c3cb9623447132e6"
+    },
+    "reports/downloads.json": {
+      "bytes": 1091,
+      "sha256": "3c6a0baeeea639d0da1304f5b2e6fd355d540ab9cd4c21e9418365cd41b43024"
+    },
+    "reports/environment-linux-asr-checks.json": {
+      "bytes": 703,
+      "sha256": "778750449a08eaae63c1598f37943dee2d0b3e3a6fd0834cc28b8583b6dd7ee9"
+    },
+    "reports/environment-linux-asr.json": {
+      "bytes": 865,
+      "sha256": "6348ff807dd82b8bcbf184f07115cab8ea9003b567d1e1ada3f9cd017028e723"
+    },
+    "reports/environment-linux-train.json": {
+      "bytes": 815,
+      "sha256": "96142336bd7cfa06d69333000e6e7e424e1cf4c51f2f877ba4368c3dd5c9ec60"
+    },
+    "reports/environment-linux.json": {
+      "bytes": 815,
+      "sha256": "96142336bd7cfa06d69333000e6e7e424e1cf4c51f2f877ba4368c3dd5c9ec60"
+    },
+    "reports/ger-cloud-smoke-qwen-dev.json": {
+      "bytes": 233,
+      "sha256": "2a196ab87cf867c07f43ffc6d1fa7c4bb9becaf2e1799d115b1a0a9e1efae707"
+    },
+    "reports/qwen-model-download.json": {
+      "bytes": 1072,
+      "sha256": "678a8a5cbd1072c2eabe18a441d41e880ea88b7ee55b070f4343d61c8a7b76cf"
+    },
+    "reports/qwen-smoke-token-audit.json": {
+      "bytes": 1314,
+      "sha256": "3c62aaaedc081742113020e0b4b73ac7c8351193d4ce54e7eabacfa19d6ed0f3"
+    },
+    "reports/qwen-smoke-verification.json": {
+      "bytes": 673,
+      "sha256": "4fcb0dce25078345d11ae2abeff1e26cc00589fcf8678ab2d1f8f2f22fd673b5"
+    },
+    "reports/whisper-cache-optimization.json": {
+      "bytes": 1040,
+      "sha256": "8c60c4e32509118278bb819e864e96e9213d38af7008d0caceed75237623e37f"
+    },
+    "reports/whisper-large-v2-download.json": {
+      "bytes": 620,
+      "sha256": "116057ccdb1ba6c3c9be6bcdc7b82bba52396e6d782076c65ebd4d41b7ed88e3"
+    },
+    "reports/云端Qwen起步验收.md": {
+      "bytes": 6135,
+      "sha256": "a9ccf8cbf066821824200017d212125ddf6ad8c122a959d99e8176d419b3c3e1"
+    },
+    "requirements/cloud-asr.lock.txt": {
+      "bytes": 1133,
+      "sha256": "d0c13c7776c7ddc6ded44854dca9e00a47a7ea468dd9eecc71d866f977f0bbdd"
+    },
+    "requirements/cloud-asr.txt": {
+      "bytes": 317,
+      "sha256": "4abc9db72dd40f69d2cd3249e544980550e2b9485419690e5ad91281625d590e"
+    },
+    "requirements/cloud-train.lock.txt": {
+      "bytes": 1649,
+      "sha256": "4faa61bc129e435217418adb6b7d709373e6d6eec296c12008f85bf53844fe96"
+    },
+    "requirements/cloud-train.txt": {
+      "bytes": 222,
+      "sha256": "895a667d30d67bc302b60c47f556be40e40aace9e5b5bd1670a49f5edc25722b"
+    },
+    "requirements/conda-linux-64-asr.explicit.txt": {
+      "bytes": 12774,
+      "sha256": "763f758196925e344a984bb379c0dcb448ece7a3f4e67ca6c46601e5fc95839c"
+    },
+    "requirements/conda-linux-64-train.explicit.txt": {
+      "bytes": 12774,
+      "sha256": "763f758196925e344a984bb379c0dcb448ece7a3f4e67ca6c46601e5fc95839c"
+    },
+    "scripts/build_ger_data.py": {
+      "bytes": 2070,
+      "sha256": "5c289898aee39b2f46a7585d81eddc6a59c4b61437c3cc4df9a94db1b70735b7"
+    },
+    "scripts/check_env.py": {
+      "bytes": 1325,
+      "sha256": "ff2f2ff4a761ebbef7c4734e4caf373c74ebd53ff21de6d37f4420c917ccce0c"
+    },
+    "scripts/download_asr_model.py": {
+      "bytes": 2191,
+      "sha256": "290e69d2025ce146b920fe8477752420138673cde475713f3b6d80c07a6d42d8"
+    },
+    "scripts/download_data.py": {
+      "bytes": 8209,
+      "sha256": "5141d713008c56151df0206c133a9caa55b4283e298e904fcc1bb175557abd27"
+    },
+    "scripts/download_ger_model.py": {
+      "bytes": 3073,
+      "sha256": "93fb8d9589d009169a7faca56b0c79e5f3343a6123cb2e118ef0d6182de91b2d"
+    },
+    "scripts/evaluate.py": {
+      "bytes": 2030,
+      "sha256": "347605c73acc15fe5d0c4a6a8dac4f78e174aa9d15c03041dae9935cac1f0de5"
+    },
+    "scripts/fetch_upstream.py": {
+      "bytes": 1348,
+      "sha256": "de72161adbb9263b547ae8cc88a9ee3cfbe0466985eed96f610359e0bff427b1"
+    },
+    "scripts/generate_nbest.py": {
+      "bytes": 72,
+      "sha256": "460490a33c822bbb123c8c247f88e2bf6c2f122aec0ddff631a041ae06fb0374"
+    },
+    "scripts/infer_ger.py": {
+      "bytes": 92,
+      "sha256": "bc8779a79ea35bb08b49f0931f6b3a78c8e521097728ca891b87bb39ba6360e4"
+    },
+    "scripts/prepare_full_asr.sh": {
+      "bytes": 1629,
+      "sha256": "06ca7121e56df7636c05db84f242fed3d7b43067ba5aaf0806e88e6b7ede9444"
+    },
+    "scripts/prepare_voicebank.py": {
+      "bytes": 73,
+      "sha256": "1dffaed5baa0c4d96d00962cac89b65cdd1602182fd5b865187bacaa02be333e"
+    },
+    "scripts/train_ger.py": {
+      "bytes": 807,
+      "sha256": "28529ddda21140c5f772faefa57835ab20d9a04e78b19a028ab4030d7adc6770"
+    },
+    "src/vanilla_ger/__init__.py": {
+      "bytes": 67,
+      "sha256": "ae81933c75a34abf23922ff0a6cafa77b1c2fa239c14e7a8a4c3976fe9546cca"
+    },
+    "src/vanilla_ger/asr.py": {
+      "bytes": 7503,
+      "sha256": "09cc7ee2834257559813dcb1db3f51490e8f72e7cc7f9ba071366da9fb422cac"
+    },
+    "src/vanilla_ger/checkpoint.py": {
+      "bytes": 2600,
+      "sha256": "ad0f091c7d8c85e0c7ecbcd141297368b61aaa40a9456caba0dab71bb4197da5"
+    },
+    "src/vanilla_ger/common.py": {
+      "bytes": 1673,
+      "sha256": "5ff7ea6eeb86f947b79ca2bb217888d984f71a9a9a4ffcb24f25b13bfb688314"
+    },
+    "src/vanilla_ger/data.py": {
+      "bytes": 6071,
+      "sha256": "748025bfd7ce9b759978e33b38bffaea36b0399a0e2b1b5789179b83c6fa3815"
+    },
+    "src/vanilla_ger/ger.py": {
+      "bytes": 15754,
+      "sha256": "26b517cdcb8af29c22295b2eaf9de1072ad6baa9dccf3367b5f5ddf150b0dfef"
+    },
+    "src/vanilla_ger/metrics.py": {
+      "bytes": 2546,
+      "sha256": "3de6f46ebe42d922a4a8d268870ec2b0642b6a796ce3ef775522d6799372b23b"
+    },
+    "src/vanilla_ger/upstream.py": {
+      "bytes": 1337,
+      "sha256": "d5db417127c0b7252172e137d1a6e453abaa78898a243eb78feaf2a618db874c"
+    },
+    "tests/test_checkpoint.py": {
+      "bytes": 3303,
+      "sha256": "21e38203da6c90153ec7fbfe73d175a49da99981db0abb70e797f75f0b344f8f"
+    },
+    "tests/test_pipeline.py": {
+      "bytes": 12364,
+      "sha256": "f06c2299ae4333e62675d0df937eac58201071a564187a4a8d07e4d7e46f089c"
+    }
+  }
+}

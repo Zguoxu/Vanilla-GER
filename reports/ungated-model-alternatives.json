@@ -1,0 +1,159 @@
+{
+  "checked_at": "2026-10-20T22:14:37+08:00",
+  "models": [
+    {
+      "model": "Qwen/Qwen2.5-7B",
+      "http_status": 200,
+      "sha": "d149729398750b98c0af14eb82c78cfe92750796",
+      "gated": false,
+      "private": false,
+      "license": "apache-2.0",
+      "safetensors_total_bytes": 15231271888,
+      "weight_files": [
+        {
+          "name": "model-00001-of-00004.safetensors",
+          "size_bytes": 3945441440
+        },
+        {
+          "name": "model-00002-of-00004.safetensors",
+          "size_bytes": 3864726352
+        },
+        {
+          "name": "model-00003-of-00004.safetensors",
+          "size_bytes": 3864726424
+        },
+        {
+          "name": "model-00004-of-00004.safetensors",
+          "size_bytes": 3556377672
+        }
+      ],
+      "model_config": {
+        "model_type": "qwen2",
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "hidden_size": 3584,
+        "num_hidden_layers": 28,
+        "num_attention_heads": 28,
+        "num_key_value_heads": 4,
+        "vocab_size": 152064,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.40.1"
+      },
+      "weight_probe": {
+        "status": 206,
+        "content_range": "bytes 0-0/3945441440",
+        "bytes_read": 1,
+        "authenticated": false
+      }
+    },
+    {
+      "model": "Qwen/Qwen2.5-14B",
+      "http_status": 200,
+      "sha": "97e1e76335b7017d8f67c08a19d103c0504298c9",
+      "gated": false,
+      "private": false,
+      "license": "apache-2.0",
+      "safetensors_total_bytes": 29540133920,
+      "weight_files": [
+        {
+          "name": "model-00001-of-00008.safetensors",
+          "size_bytes": 3885134104
+        },
+        {
+          "name": "model-00002-of-00008.safetensors",
+          "size_bytes": 3995327992
+        },
+        {
+          "name": "model-00003-of-00008.safetensors",
+          "size_bytes": 3995328064
+        },
+        {
+          "name": "model-00004-of-00008.safetensors",
+          "size_bytes": 3995348776
+        },
+        {
+          "name": "model-00005-of-00008.safetensors",
+          "size_bytes": 3979614448
+        },
+        {
+          "name": "model-00006-of-00008.safetensors",
+          "size_bytes": 3995328064
+        },
+        {
+          "name": "model-00007-of-00008.safetensors",
+          "size_bytes": 3995328064
+        },
+        {
+          "name": "model-00008-of-00008.safetensors",
+          "size_bytes": 1698724408
+        }
+      ],
+      "model_config": {
+        "model_type": "qwen2",
+        "architectures": [
+          "Qwen2ForCausalLM"
+        ],
+        "hidden_size": 5120,
+        "num_hidden_layers": 48,
+        "num_attention_heads": 40,
+        "num_key_value_heads": 8,
+        "vocab_size": 152064,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.43.1"
+      },
+      "weight_probe": {
+        "status": 206,
+        "content_range": "bytes 0-0/3885134104",
+        "bytes_read": 1,
+        "authenticated": false
+      }
+    },
+    {
+      "model": "mistralai/Mistral-7B-v0.3",
+      "http_status": 200,
+      "sha": "caa1feb0e54d415e2df31207e5f4e273e33509b1",
+      "gated": false,
+      "private": false,
+      "license": "apache-2.0",
+      "safetensors_total_bytes": 28992159440,
+      "weight_files": [
+        {
+          "name": "consolidated.safetensors",
+          "size_bytes": 14496078512
+        },
+        {
+          "name": "model-00001-of-00003.safetensors",
+          "size_bytes": 4949453792
+        },
+        {
+          "name": "model-00002-of-00003.safetensors",
+          "size_bytes": 4999819336
+        },
+        {
+          "name": "model-00003-of-00003.safetensors",
+          "size_bytes": 4546807800
+        }
+      ],
+      "model_config": {
+        "model_type": "mistral",
+        "architectures": [
+          "MistralForCausalLM"
+        ],
+        "hidden_size": 4096,
+        "num_hidden_layers": 32,
+        "num_attention_heads": 32,
+        "num_key_value_heads": 8,
+        "vocab_size": 32768,
+        "torch_dtype": "bfloat16",
+        "transformers_version": "4.42.0.dev0"
+      },
+      "weight_probe": {
+        "status": 206,
+        "content_range": "bytes 0-0/14496078512",
+        "bytes_read": 1,
+        "authenticated": false
+      }
+    }
+  ]
+}

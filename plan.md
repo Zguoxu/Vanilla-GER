@@ -1,14 +1,29 @@
 # HyPoradise 在 VoiceBank-DEMAND 上的分步复现计划
 
-更新时间：2026-10-19  
-项目目录：`/Users/zguoxu/Documents/expriment/Vanilla GER`  
+更新时间：2026-10-20
+
+云端项目目录：`/home/featurize/work/Vanilla-GER`（原 Mac 目录：`/Users/zguoxu/Documents/expriment/Vanilla GER`）
 项目仓库：[Zguoxu/Vanilla-GER](https://github.com/Zguoxu/Vanilla-GER)  
 面向对象：第一次复现论文的学习者。  
 开发方式：先在 Mac 编写代码并做小样本检查，通过 Git 同步到云端；每完成一个需要 GPU 的模块就上云验证，无需等全部代码写完。云端 RTX 3090 练手，后续根据实测考虑 RTX 4090、RTX 5090 或 A100。
 
-> 本文包含总体计划和本地执行进度。训练含噪音频、人工文本、源码和 Mac Conda 环境已准备；正式 GPU 训练和论文方法的最终结果仍待验证。
+> 本文包含总体计划、本地历史进度和云端验收。当前已完成真实 Qwen 7B 的小样本 CUDA 训练闭环；全量正式训练和最终测试结果仍待验证。
 
-## 当前进度：2026-10-19
+## 2026-10-20 云端方案更新
+
+用户已确认使用 **Qwen/Qwen2.5-7B 基础版**替代原论文第一代 LLaMA。固定 revision 为 `d149729398750b98c0af14eb82c78cfe92750796`，训练配置见 `configs/ger-qwen2.5-7b.json`，练手配置见 `configs/ger-qwen2.5-7b-smoke.json`。
+
+当前主线为：**VoiceBank-DEMAND 含噪音频 → 冻结的 Whisper large-v2（beam=60，去重后最多5条候选）→ Qwen2.5-7B 的 8-bit 基座 + LoRA → 文本及 WER**。模型家族、规模、数据集均有迁移差异，结果记录为方法复现与迁移实验。4-bit 为独立变体。先用 tiny.en 的独立缓存验收小样本，再验证正式 ASR 设置。
+
+云端已建立独立 ASR/训练环境；Qwen/Whisper 权重及哈希、11,572条训练部分数据、固定 train/dev 划分均已核验。15项软件测试通过，包含GPU上的INT8 LoRA更新。真实 Qwen 7B 已用32条 train、4条 dev 完成8次参数更新，退出后重载预测一致；该小样本 WER 未改善，只用于流程验收。
+
+large-v2/beam=60 已完成10条 dev 测速与评分。修正上游交叉注意力缓存的重复计算后，同批候选及分数完全一致，3090 解码耗时由17.60降至8.53秒/条，按11,572条外推约27.4小时。4090 尚未实测。详见 [云端起步验收](reports/云端Qwen起步验收.md) 和 [云端操作指南](docs/Qwen与VoiceBank云端复现.md)。全量候选脚本已准备，尚未启动。
+
+后续更新：官方测试音频与文本已下载并通过官方MD5；独立test为824条（p232/p257），现有train/dev的6份输入和参考清单内容未变。统一入口 `scripts/prepare_full_asr.sh` 已扩展到train/dev/test，并提供 `--dry-run` 和 `--limit 1`。三部分各1条实际解码已通过，共12,396条的全量候选仍未启动。按原10条速度外推约29.4小时，仅供预算参考。详见 [三部分数据与ASR准备](reports/VoiceBank三部分数据与ASR准备.md)。
+
+2026-10-21补充：clean训练及测试音频也已下载，按ID配对检查见 [clean下载验收](reports/VoiceBank-clean下载验收.md)。clean用于后续对照，当前含噪音频的ASR输入与划分保持原有配置。
+
+## Mac 历史进度：2026-10-19
 
 - [x] 下载并通过官方 MD5 校验的 28-speaker 训练含噪音频、人工文本已解压到 `data/raw/voicebank_demand/`。
 - [x] 扫描 11,572 条样本；固定为 train 10,830 条、dev 742 条，dev 说话人为 p226、p227。
@@ -17,7 +32,7 @@
 - [x] 用 `tiny.en/beam=5/CPU` 跑通 10 条真实训练音频的候选、评分和 GER 格式导出。
 - [ ] 云端 CUDA/量化验证、正式 large-v2 候选生成、真实 LLaMA 训练和官方 test 评测。
 
-现在先阅读 [本地开发与 Conda 教程](docs/本地开发与Conda教程.md)，执行结果见 [本地配置验收](reports/本地配置验收.md)。下文各阶段清单描述完整目标，不能将少量本地 smoke 检查等同于正式实验完成。
+原计划引用的 `docs/本地开发与Conda教程.md` 在当前仓库及本地 Git 历史中未找到。云端现在按 [Qwen 与 VoiceBank 操作指南](docs/Qwen与VoiceBank云端复现.md) 执行；原 Mac 结果见 [本地配置验收](reports/本地配置验收.md)。下文各阶段清单描述完整目标，不能将少量 smoke 检查等同于正式实验完成。
 
 ## 1. 先明确我们要复现什么
 
@@ -91,9 +106,9 @@ flowchart LR
 | 项目 | 论文中的主要设置 | 本项目安排 |
 | --- | --- | --- |
 | 训练任务 | 候选文本列表 → 参考文本 | 保持一致，训练 GER 时冻结 ASR |
-| ASR | Whisper-Large，附录明确 large-v2 | 练手用 `base`；正式用明确版本 `large-v2`，不使用含义可能变化的 `large` 别名 |
+| ASR | Whisper-Large，附录明确 large-v2 | 练手已用 `tiny.en`；正式用明确版本 `large-v2`，不使用含义可能变化的 `large` 别名 |
 | 候选生成 | beam size 60，去重后取前 5 条 | 正式对齐；练手先减小 beam，并使用独立缓存 |
-| 纠错主模型 | 原始 LLaMA-13B，即 LLaMA 第一代 | 3090 先跑第一代 7B；正式争取第一代 13B，精确来源和 revision 必须记录 |
+| 纠错主模型 | 原始 LLaMA-13B，即 LLaMA 第一代 | 用户已选 Qwen2.5-7B 基础版；固定来源及 revision，明确记录替代基座与规模差异 |
 | LoRA rank | LLaMA 的 `r=8` | 主实验对齐；仓库 README 的 `r=16` 不能误当论文值 |
 | 学习率 | `1e-4` | 作为主实验起点，只用 dev 决定调整 |
 | 有效 batch size | 128 | 用小 micro batch 和梯度累积实现 |
@@ -121,7 +136,7 @@ flowchart LR
 1. 在 3090 上用 10–20 条音频测试 ASR，用 32–64 条训练样本测试 GER。
 2. ASR 与 GER 分进程、分阶段运行。候选文本保存后，训练时不必再加载 Whisper。
 3. 用正式设置的小批样本测峰值显存、秒/条、训练步耗时，再决定是否扩容。
-4. 7B 跑通后测试 13B 的加载、一次训练更新和生成；3090 如果能满足，就没有必要仅为换卡重做实验。
+4. 先完成已选 Qwen2.5-7B 的加载、训练更新和生成；更大模型作为后续独立扩展。
 5. 发生 OOM 时先减小 micro batch、检查序列长度、启用梯度检查点。降低正式 beam、换模型或改量化精度属于实验设置变化，必须单独记录。
 
 13B 的 FP16 权重本身约需 26 GB 十进制存储量，训练还需要激活、适配器梯度及优化器等额外空间。8-bit/4-bit 能减少基座占用，但不能由权重大小直接推断训练显存。Whisper 在 beam=60 下的需求也不能套用普通单候选推理的显存估计。
@@ -310,7 +325,7 @@ manifest 每行保存：`utt_id`、`speaker_id`、`split`、`noisy_path`、`clea
 
 待做事项：
 
-- [ ] 使用固定的第一代 LLaMA-7B 和少量 train 样本，加载 8-bit 基座与 LoRA；显存仍不足时单独测试 4-bit 路线。
+- [ ] 使用固定 revision 的 Qwen2.5-7B 和少量 train 样本，加载 8-bit 基座与 LoRA；显存仍不足时单独测试 4-bit 路线。
 - [ ] micro batch 从 1 开始，记录序列长度和峰值显存；按需使用梯度检查点。
 - [ ] 先用 32–64 条短训练样本尝试过拟合，检查训练损失是否下降、是否能输出接近这些训练标签的转写。
 - [ ] 验证只有 LoRA 参数可训练，并报告可训练参数量。
@@ -328,7 +343,7 @@ manifest 每行保存：`utt_id`、`speaker_id`、`split`、`noisy_path`、`clea
 
 **目的：** 在固定的 VoiceBank-DEMAND 划分上得到可比较的 GER 模型。
 
-先完成 7B，再尝试论文的 13B。7B 是练手和迁移基线；13B 的结果单独报告。两者可以复用同一份正式 Whisper 候选缓存。
+当前正式迁移基线使用 Qwen2.5-7B。论文的第一代 LLaMA-13B 保留为历史设置对照，更大模型属于后续扩展，各自单独报告。不同 GER 基座可以复用同一份正式 Whisper 候选缓存。
 
 正式训练的初始设置：
 
@@ -351,7 +366,7 @@ manifest 每行保存：`utt_id`、`speaker_id`、`split`、`noisy_path`、`clea
 - [ ] 先测几十条正式长度的样本，确认训练与生成峰值显存。
 - [ ] 按 epoch 计算 dev **生成文本**的 WER，选择 checkpoint；loss 仅作训练诊断。
 - [ ] 保存运行 ID、数据/模板/配置哈希、基座 revision、代码 commit、种子、环境与训练日志。
-- [ ] 先锁定一个可运行的 7B 实验，再测试 13B。如果换卡，保持待比较实验的关键设置一致。
+- [ ] 先锁定可运行的 Qwen2.5-7B 实验。如果扩展模型或换卡，保持待比较实验的关键设置可核对。
 - [ ] 正式规模下完成 1-best GER 和最多 5-best GER 两个对照。
 - [ ] 冻结 checkpoint、模板、规范化与解码参数后，统一进行最终测试评测。
 
@@ -466,9 +481,8 @@ Vanilla GER/
 | --- | --- | --- | --- | --- | --- | --- | --- | --- |
 | baseline | large-v2 / beam60 | 无 | 1-best | 固定 | 待测 | 待测 | — | 待测 |
 | oracle | 同一正式候选缓存 | 无，使用标签作离线诊断 | ≤5 | — | 待测 | 待测 | — | — |
-| ger7b-1best | 同上 | LLaMA-1 7B / 8-bit+LoRA | 1 | 42 | 待测 | 待测 | 待测 | 待测 |
-| ger7b-nbest | 同上 | LLaMA-1 7B / 8-bit+LoRA | ≤5 | 42 | 待测 | 待测 | 待测 | 待测 |
-| ger13b-nbest | 同上 | LLaMA-1 13B / 实际精度 | ≤5 | 42 | 待测 | 待测 | 待测 | 待测 |
+| ger-qwen7b-1best | 同上 | Qwen2.5-7B / 8-bit+LoRA | 1 | 42 | 待测 | 待测 | 待测 | 待测 |
+| ger-qwen7b-nbest | 同上 | Qwen2.5-7B / 8-bit+LoRA | ≤5 | 42 | 待测 | 待测 | 待测 | 待测 |
 
 每行另附实际模型 revision、配置路径、checkpoint、数据哈希、提示版本、代码版本及评分版本。若测试方案尚未冻结，只填 dev 列。
 

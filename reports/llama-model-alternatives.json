@@ -1,0 +1,342 @@
+{
+  "checked_at": "2026-10-20T22:07:35+08:00",
+  "models": [
+    {
+      "model": "huggyllama/llama-13b",
+      "status": 200,
+      "sha": "bf57045473f207bb1de1ed035ace226f4d9f9bba",
+      "gated": false,
+      "private": false,
+      "config": {
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "model_type": "llama",
+        "tokenizer_config": {
+          "bos_token": {
+            "__type": "AddedToken",
+            "content": "<s>",
+            "lstrip": false,
+            "normalized": true,
+            "rstrip": false,
+            "single_word": false
+          },
+          "eos_token": {
+            "__type": "AddedToken",
+            "content": "</s>",
+            "lstrip": false,
+            "normalized": true,
+            "rstrip": false,
+            "single_word": false
+          },
+          "pad_token": null,
+          "unk_token": {
+            "__type": "AddedToken",
+            "content": "<unk>",
+            "lstrip": false,
+            "normalized": true,
+            "rstrip": false,
+            "single_word": false
+          }
+        }
+      },
+      "weight_files": [
+        {
+          "name": "model-00001-of-00003.safetensors",
+          "size_bytes": 9948693455
+        },
+        {
+          "name": "model-00002-of-00003.safetensors",
+          "size_bytes": 9904129563
+        },
+        {
+          "name": "model-00003-of-00003.safetensors",
+          "size_bytes": 6178962382
+        },
+        {
+          "name": "pytorch_model-00001-of-00003.bin",
+          "size_bytes": 9948728430
+        },
+        {
+          "name": "pytorch_model-00002-of-00003.bin",
+          "size_bytes": 9904165024
+        },
+        {
+          "name": "pytorch_model-00003-of-00003.bin",
+          "size_bytes": 6178983625
+        }
+      ],
+      "tokenizer_files": [
+        "tokenizer.json",
+        "tokenizer.model",
+        "tokenizer_config.json"
+      ],
+      "config.json": {
+        "_name_or_path": "/home/sgugger/tmp/llama/llama-13b/",
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "bos_token_id": 1,
+        "eos_token_id": 2,
+        "hidden_act": "silu",
+        "hidden_size": 5120,
+        "initializer_range": 0.02,
+        "intermediate_size": 13824,
+        "max_position_embeddings": 2048,
+        "max_sequence_length": 2048,
+        "model_type": "llama",
+        "num_attention_heads": 40,
+        "num_hidden_layers": 40,
+        "pad_token_id": 0,
+        "rms_norm_eps": 1e-06,
+        "tie_word_embeddings": false,
+        "torch_dtype": "float16",
+        "transformers_version": "4.28.0.dev0",
+        "use_cache": true,
+        "vocab_size": 32000
+      },
+      "tokenizer_config.json": {
+        "add_bos_token": true,
+        "add_eos_token": false,
+        "bos_token": {
+          "__type": "AddedToken",
+          "content": "<s>",
+          "lstrip": false,
+          "normalized": true,
+          "rstrip": false,
+          "single_word": false
+        },
+        "clean_up_tokenization_spaces": false,
+        "eos_token": {
+          "__type": "AddedToken",
+          "content": "</s>",
+          "lstrip": false,
+          "normalized": true,
+          "rstrip": false,
+          "single_word": false
+        },
+        "model_max_length": 2048,
+        "pad_token": null,
+        "sp_model_kwargs": {},
+        "tokenizer_class": "LlamaTokenizer",
+        "unk_token": {
+          "__type": "AddedToken",
+          "content": "<unk>",
+          "lstrip": false,
+          "normalized": true,
+          "rstrip": false,
+          "single_word": false
+        }
+      },
+      "weight_range_probe": {
+        "status": 206,
+        "content_range": "bytes 0-0/9948693455",
+        "bytes_read": 1
+      }
+    },
+    {
+      "model": "huggyllama/llama-7b",
+      "status": 200,
+      "sha": "4782ad278652c7c71b72204d462d6d01eaaf7549",
+      "gated": false,
+      "private": false,
+      "config": {
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "model_type": "llama",
+        "tokenizer_config": {
+          "bos_token": {
+            "__type": "AddedToken",
+            "content": "<s>",
+            "lstrip": false,
+            "normalized": true,
+            "rstrip": false,
+            "single_word": false
+          },
+          "eos_token": {
+            "__type": "AddedToken",
+            "content": "</s>",
+            "lstrip": false,
+            "normalized": true,
+            "rstrip": false,
+            "single_word": false
+          },
+          "chat_template": "{% if messages[0]['role'] == 'system' %}{% set loop_messages = messages[1:] %}{% set system_message = messages[0]['content'] %}{% elif false == true and not '<<SYS>>' in messages[0]['content'] %}{% set loop_messages = messages %}{% set system_message = 'You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\\n\\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don\\'t know the answer to a question, please don\\'t share false information.' %}{% else %}{% set loop_messages = messages %}{% set system_message = false %}{% endif %}{% for message in loop_messages %}{% if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}{{ raise_exception('Conversation roles must alternate user/assistant/user/assistant/...') }}{% endif %}{% if loop.index0 == 0 and system_message != false %}{% set content = '<<SYS>>\\n' + system_message + '\\n<</SYS>>\\n\\n' + message['content'] %}{% else %}{% set content = message['content'] %}{% endif %}{% if message['role'] == 'user' %}{{ bos_token + '[INST] ' + content.strip() + ' [/INST]' }}{% elif message['role'] == 'system' %}{{ '<<SYS>>\\n' + content.strip() + '\\n<</SYS>>\\n\\n' }}{% elif message['role'] == 'assistant' %}{{ ' '  + content.strip() + ' ' + eos_token }}{% endif %}{% endfor %}",
+          "pad_token": null,
+          "unk_token": {
+            "__type": "AddedToken",
+            "content": "<unk>",
+            "lstrip": false,
+            "normalized": true,
+            "rstrip": false,
+            "single_word": false
+          }
+        }
+      },
+      "weight_files": [
+        {
+          "name": "model-00001-of-00002.safetensors",
+          "size_bytes": 9976579217
+        },
+        {
+          "name": "model-00002-of-00002.safetensors",
+          "size_bytes": 3500297444
+        },
+        {
+          "name": "pytorch_model-00001-of-00002.bin",
+          "size_bytes": 9976634558
+        },
+        {
+          "name": "pytorch_model-00002-of-00002.bin",
+          "size_bytes": 3500315539
+        }
+      ],
+      "tokenizer_files": [
+        "tokenizer.json",
+        "tokenizer.model",
+        "tokenizer_config.json"
+      ],
+      "config.json": {
+        "_name_or_path": "/home/sgugger/tmp/llama/llama-7b/",
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "bos_token_id": 1,
+        "eos_token_id": 2,
+        "hidden_act": "silu",
+        "hidden_size": 4096,
+        "initializer_range": 0.02,
+        "intermediate_size": 11008,
+        "max_position_embeddings": 2048,
+        "max_sequence_length": 2048,
+        "model_type": "llama",
+        "num_attention_heads": 32,
+        "num_hidden_layers": 32,
+        "pad_token_id": 0,
+        "rms_norm_eps": 1e-06,
+        "tie_word_embeddings": false,
+        "torch_dtype": "float16",
+        "transformers_version": "4.28.0.dev0",
+        "use_cache": true,
+        "vocab_size": 32000
+      },
+      "tokenizer_config.json": {
+        "add_bos_token": true,
+        "add_eos_token": false,
+        "bos_token": {
+          "__type": "AddedToken",
+          "content": "<s>",
+          "lstrip": false,
+          "normalized": true,
+          "rstrip": false,
+          "single_word": false
+        },
+        "clean_up_tokenization_spaces": false,
+        "eos_token": {
+          "__type": "AddedToken",
+          "content": "</s>",
+          "lstrip": false,
+          "normalized": true,
+          "rstrip": false,
+          "single_word": false
+        },
+        "chat_template": "{% if messages[0]['role'] == 'system' %}{% set loop_messages = messages[1:] %}{% set system_message = messages[0]['content'] %}{% elif false == true and not '<<SYS>>' in messages[0]['content'] %}{% set loop_messages = messages %}{% set system_message = 'You are a helpful, respectful and honest assistant. Always answer as helpfully as possible, while being safe. Your answers should not include any harmful, unethical, racist, sexist, toxic, dangerous, or illegal content. Please ensure that your responses are socially unbiased and positive in nature.\\n\\nIf a question does not make any sense, or is not factually coherent, explain why instead of answering something not correct. If you don\\'t know the answer to a question, please don\\'t share false information.' %}{% else %}{% set loop_messages = messages %}{% set system_message = false %}{% endif %}{% for message in loop_messages %}{% if (message['role'] == 'user') != (loop.index0 % 2 == 0) %}{{ raise_exception('Conversation roles must alternate user/assistant/user/assistant/...') }}{% endif %}{% if loop.index0 == 0 and system_message != false %}{% set content = '<<SYS>>\\n' + system_message + '\\n<</SYS>>\\n\\n' + message['content'] %}{% else %}{% set content = message['content'] %}{% endif %}{% if message['role'] == 'user' %}{{ bos_token + '[INST] ' + content.strip() + ' [/INST]' }}{% elif message['role'] == 'system' %}{{ '<<SYS>>\\n' + content.strip() + '\\n<</SYS>>\\n\\n' }}{% elif message['role'] == 'assistant' %}{{ ' '  + content.strip() + ' ' + eos_token }}{% endif %}{% endfor %}",
+        "model_max_length": 2048,
+        "pad_token": null,
+        "sp_model_kwargs": {},
+        "tokenizer_class": "LlamaTokenizer",
+        "unk_token": {
+          "__type": "AddedToken",
+          "content": "<unk>",
+          "lstrip": false,
+          "normalized": true,
+          "rstrip": false,
+          "single_word": false
+        }
+      },
+      "weight_range_probe": {
+        "status": 206,
+        "content_range": "bytes 0-0/9976579217",
+        "bytes_read": 1
+      }
+    },
+    {
+      "model": "meta-llama/Llama-2-13b-hf",
+      "status": 200,
+      "sha": "5c31dfb671ce7cfe2d7bb7c04375e44c55e815b1",
+      "gated": "manual",
+      "private": false,
+      "config": {
+        "architectures": [
+          "LlamaForCausalLM"
+        ],
+        "model_type": "llama",
+        "tokenizer_config": {
+          "bos_token": {
+            "__type": "AddedToken",
+            "content": "<s>",
+            "lstrip": false,
+            "normalized": false,
+            "rstrip": false,
+            "single_word": false
+          },
+          "eos_token": {
+            "__type": "AddedToken",
+            "content": "</s>",
+            "lstrip": false,
+            "normalized": false,
+            "rstrip": false,
+            "single_word": false
+          },
+          "pad_token": null,
+          "unk_token": {
+            "__type": "AddedToken",
+            "content": "<unk>",
+            "lstrip": false,
+            "normalized": false,
+            "rstrip": false,
+            "single_word": false
+          }
+        }
+      },
+      "weight_files": [
+        {
+          "name": "model-00001-of-00003.safetensors",
+          "size_bytes": 9948693272
+        },
+        {
+          "name": "model-00002-of-00003.safetensors",
+          "size_bytes": 9904129368
+        },
+        {
+          "name": "model-00003-of-00003.safetensors",
+          "size_bytes": 6178962272
+        },
+        {
+          "name": "pytorch_model-00001-of-00003.bin",
+          "size_bytes": 9948728430
+        },
+        {
+          "name": "pytorch_model-00002-of-00003.bin",
+          "size_bytes": 9904165024
+        },
+        {
+          "name": "pytorch_model-00003-of-00003.bin",
+          "size_bytes": 6178983625
+        }
+      ],
+      "tokenizer_files": [
+        "tokenizer.json",
+        "tokenizer.model",
+        "tokenizer_config.json"
+      ],
+      "config.json": {
+        "error": "HTTP Error 401: Unauthorized"
+      },
+      "tokenizer_config.json": {
+        "error": "HTTP Error 401: Unauthorized"
+      }
+    }
+  ]
+}

@@ -1,0 +1,9 @@
+-r cloud-asr.txt
+peft==0.13.2
+accelerate==1.1.1
+datasets==3.1.0
+sentencepiece==0.2.0
+fire==0.7.0
+pytest==8.3.5
+# PEFT 0.13.2's int8 adapter dispatcher requires MatmulLtState.memory_efficient_backward.
+bitsandbytes==0.44.1

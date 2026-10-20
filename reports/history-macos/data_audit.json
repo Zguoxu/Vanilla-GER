@@ -1,0 +1,96 @@
+{
+  "source": "https://doi.org/10.7488/ds/2117",
+  "official_train_utterances": 11572,
+  "speakers": [
+    "p226",
+    "p227",
+    "p228",
+    "p230",
+    "p231",
+    "p233",
+    "p236",
+    "p239",
+    "p243",
+    "p244",
+    "p250",
+    "p254",
+    "p256",
+    "p258",
+    "p259",
+    "p267",
+    "p268",
+    "p269",
+    "p270",
+    "p273",
+    "p274",
+    "p276",
+    "p277",
+    "p278",
+    "p279",
+    "p282",
+    "p286",
+    "p287"
+  ],
+  "dev_speakers": [
+    "p226",
+    "p227"
+  ],
+  "sample_rates": {
+    "48000": 11572
+  },
+  "channels": {
+    "1": 11572
+  },
+  "audio_hash_overlap": 0,
+  "casefolded_exact_text_overlap": 598,
+  "normalized_text_overlap": 605,
+  "normalization_version": "hyporadise-english-plus-number-normalizer-v1",
+  "test_downloaded": false,
+  "clean_audio_downloaded": false,
+  "splits": {
+    "train": {
+      "utterances": 10830,
+      "hours": 8.74717526041668,
+      "speakers": [
+        "p228",
+        "p230",
+        "p231",
+        "p233",
+        "p236",
+        "p239",
+        "p243",
+        "p244",
+        "p250",
+        "p254",
+        "p256",
+        "p258",
+        "p259",
+        "p267",
+        "p268",
+        "p269",
+        "p270",
+        "p273",
+        "p274",
+        "p276",
+        "p277",
+        "p278",
+        "p279",
+        "p282",
+        "p286",
+        "p287"
+      ],
+      "min_duration_sec": 1.092375,
+      "max_duration_sec": 15.1120625
+    },
+    "dev": {
+      "utterances": 742,
+      "hours": 0.6440553587962956,
+      "speakers": [
+        "p226",
+        "p227"
+      ],
+      "min_duration_sec": 1.4858125,
+      "max_duration_sec": 12.289395833333334
+    }
+  }
+}

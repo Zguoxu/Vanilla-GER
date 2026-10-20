@@ -1,0 +1,17 @@
+LICENSE
+README.md
+pyproject.toml
+src/vanilla_ger/__init__.py
+src/vanilla_ger/asr.py
+src/vanilla_ger/checkpoint.py
+src/vanilla_ger/common.py
+src/vanilla_ger/data.py
+src/vanilla_ger/ger.py
+src/vanilla_ger/metrics.py
+src/vanilla_ger/upstream.py
+src/vanilla_ger.egg-info/PKG-INFO
+src/vanilla_ger.egg-info/SOURCES.txt
+src/vanilla_ger.egg-info/dependency_links.txt
+src/vanilla_ger.egg-info/top_level.txt
+tests/test_checkpoint.py
+tests/test_pipeline.py

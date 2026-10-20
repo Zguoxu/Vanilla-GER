@@ -49,6 +49,7 @@ def generate(manifest, output, model_name="tiny.en", beam_size=5, nbest=5, devic
               "checkpoint_sha256": whisper._MODELS[model_name].split("/")[-2] if model_name in whisper._MODELS else sha256_file(resolve_path(model_name)),
               "upstream_commit": UPSTREAM_COMMIT,
               "decoder_sha256": sha256_file(ROOT / "third_party/Hypo2Trans/generate_data/whisper/whisper/decoding.py"),
+              "model_sha256": sha256_file(ROOT / "third_party/Hypo2Trans/generate_data/whisper/whisper/model.py"),
               "audio_inputs_sha256": hashlib.sha256(json.dumps(audio_identity, sort_keys=True).encode()).hexdigest()}
     meta_path = output.with_suffix(".meta.json")
     if meta_path.exists() and json.loads(meta_path.read_text())["config"] != config:
@@ -66,8 +67,10 @@ def generate(manifest, output, model_name="tiny.en", beam_size=5, nbest=5, devic
     write_json(meta_path, {"config": config, "status": "running"})
     torch.manual_seed(42)
     torch.set_num_threads(min(torch.get_num_threads(), 4))
+    load_started = time.monotonic()
     model = whisper.load_model(model_name, device=device, download_root=str(ROOT / ".cache/whisper"))
     model.eval()
+    model_load_seconds = time.monotonic() - load_started
     options = whisper.DecodingOptions(language="en", task="transcribe", beam_size=beam_size,
                                       temperature=0.0, without_timestamps=True, fp16=device.startswith("cuda"),
                                       sample_len=sample_len, return_scores=True)
@@ -92,10 +95,17 @@ def generate(manifest, output, model_name="tiny.en", beam_size=5, nbest=5, devic
             stream.flush()
             generated += 1
             print(f'{row["utt_id"]}: {len(selected)} unique candidates; 1-best={selected[0]["normalized"]}', flush=True)
+    device_metrics = {}
+    if device.startswith("cuda"):
+        torch.cuda.synchronize()
+        device_metrics = {"gpu": torch.cuda.get_device_name(model.device),
+                          "cuda_peak_allocated_bytes": torch.cuda.max_memory_allocated(model.device),
+                          "cuda_peak_reserved_bytes": torch.cuda.max_memory_reserved(model.device)}
     seconds = time.monotonic() - started
     write_json(meta_path, {"config": config, "status": "complete", "utterances": len(rows),
                            "generated_this_run": generated, "seconds_this_run": seconds,
-                           "seconds_per_utterance_this_run": seconds / max(1, generated)})
+                           "seconds_per_utterance_this_run": seconds / max(1, generated),
+                           "model_load_seconds": model_load_seconds, **device_metrics})
 
 
 def main():

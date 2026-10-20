@@ -1,0 +1,12 @@
+# Linux ASR environment. CUDA wheels are pinned separately from the Mac stack.
+--extra-index-url https://download.pytorch.org/whl/cu121
+numpy==1.26.4
+scipy==1.13.1
+soundfile==0.13.1
+torch==2.5.1+cu121
+torchaudio==2.5.1+cu121
+transformers==4.46.3
+ffmpeg-python==0.2.0
+more-itertools==10.5.0
+tqdm==4.67.1
+PyYAML==6.0.2

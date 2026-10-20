@@ -1,0 +1,306 @@
+{
+  "checked_at": "2026-10-21T00:09:07.456442+08:00",
+  "status": "three_splits_prepared_and_smoke_verified",
+  "splits": {
+    "train": {
+      "utterances": 10830,
+      "hours": 8.74717526041668,
+      "speakers": [
+        "p228",
+        "p230",
+        "p231",
+        "p233",
+        "p236",
+        "p239",
+        "p243",
+        "p244",
+        "p250",
+        "p254",
+        "p256",
+        "p258",
+        "p259",
+        "p267",
+        "p268",
+        "p269",
+        "p270",
+        "p273",
+        "p274",
+        "p276",
+        "p277",
+        "p278",
+        "p279",
+        "p282",
+        "p286",
+        "p287"
+      ],
+      "min_duration_sec": 1.092375,
+      "max_duration_sec": 15.1120625
+    },
+    "dev": {
+      "utterances": 742,
+      "hours": 0.6440553587962956,
+      "speakers": [
+        "p226",
+        "p227"
+      ],
+      "min_duration_sec": 1.4858125,
+      "max_duration_sec": 12.289395833333334
+    },
+    "test": {
+      "utterances": 824,
+      "hours": 0.5755640162037036,
+      "speakers": [
+        "p232",
+        "p257"
+      ],
+      "min_duration_sec": 1.2375625,
+      "max_duration_sec": 9.768854166666667
+    }
+  },
+  "total_utterances": 12396,
+  "all_audio_mono_48khz": true,
+  "pairwise_overlap": {
+    "train_dev": {
+      "utterance_id_overlap": 0,
+      "speaker_overlap": 0,
+      "audio_hash_overlap": 0,
+      "casefolded_exact_text_overlap": 598,
+      "normalized_text_overlap": 605
+    },
+    "train_test": {
+      "utterance_id_overlap": 0,
+      "speaker_overlap": 0,
+      "audio_hash_overlap": 0,
+      "casefolded_exact_text_overlap": 610,
+      "normalized_text_overlap": 617
+    },
+    "dev_test": {
+      "utterance_id_overlap": 0,
+      "speaker_overlap": 0,
+      "audio_hash_overlap": 0,
+      "casefolded_exact_text_overlap": 181,
+      "normalized_text_overlap": 183
+    }
+  },
+  "unchanged_existing_train_dev_files": {
+    "data/manifests/train.jsonl": true,
+    "data/manifests/dev.jsonl": true,
+    "data/audio_inputs/train.jsonl": true,
+    "data/audio_inputs/dev.jsonl": true,
+    "data/references/train.jsonl": true,
+    "data/references/dev.jsonl": true
+  },
+  "downloads": [
+    {
+      "name": "noisy_testset_wav.zip",
+      "url": "https://huggingface.co/datasets/mrfakename/noisy-speech-files/resolve/02bc68c5ad97ca55b9b7f3a7edd101585b0434e3/noisy_testset_wav.zip",
+      "size_bytes": 170578854,
+      "md5": "fb1b86caa31e8ba5b506c0c64da9aab5",
+      "official_url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/13c1bfbf-14a6-41db-9b41-8f7310f01ad5/content",
+      "expected_sha256": "ba4a893f45b627f15209ba30ab584dd495b3680cd6f216dd08d143a257611993",
+      "mirror_revision": "02bc68c5ad97ca55b9b7f3a7edd101585b0434e3",
+      "sha256": "ba4a893f45b627f15209ba30ab584dd495b3680cd6f216dd08d143a257611993",
+      "uncompressed_bytes": 198951180
+    },
+    {
+      "name": "testset_txt.zip",
+      "url": "https://datashare.ed.ac.uk/server/api/core/bitstreams/09e12592-879e-4749-bf6d-e34cf0d1ddf6/content",
+      "size_bytes": 440277,
+      "md5": "6ca8ef3756f3769c05bb694e77ad29f0",
+      "sha256": "b31edb40b39c8ddc99eda13ea038f51be3065a8b70272c8051ffc2c4294cf1d3",
+      "uncompressed_bytes": 208557
+    }
+  ],
+  "asr_preflight": "reports/asr-inputs-preflight.json",
+  "smoke": {
+    "train": {
+      "status": "complete",
+      "utterances": 1,
+      "id": "p228_001",
+      "unique_candidates": 4,
+      "decode_seconds": 13.514588744999855,
+      "load_seconds": 42.95389083899863,
+      "checkpoint_sha256": "81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524",
+      "meta_path": "data/hypotheses/whisper-large-v2-beam60-smoke-1/train.meta.json"
+    },
+    "dev": {
+      "status": "complete",
+      "utterances": 1,
+      "id": "p226_001",
+      "unique_candidates": 4,
+      "decode_seconds": 7.496304327998587,
+      "load_seconds": 25.531243497000105,
+      "checkpoint_sha256": "81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524",
+      "meta_path": "data/hypotheses/whisper-large-v2-beam60-smoke-1/dev.meta.json"
+    },
+    "test": {
+      "status": "complete",
+      "utterances": 1,
+      "id": "p232_001",
+      "unique_candidates": 5,
+      "decode_seconds": 34.026179688999036,
+      "load_seconds": 29.02620999700048,
+      "checkpoint_sha256": "81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524",
+      "meta_path": "data/hypotheses/whisper-large-v2-beam60-smoke-1/test.meta.json"
+    }
+  },
+  "checks": {
+    "targeted_data_test": "1 passed, 11 deselected in 11.10s",
+    "bash_syntax": "passed",
+    "smoke_script_exit_code": 0,
+    "test_wer_computed": false,
+    "test_exported_for_training": false,
+    "formal_command_dry_run": "passed: three full input/output pairs, strict train/dev scoring/export, no test scoring",
+    "git_diff_check": "passed"
+  },
+  "full_generation_started": false,
+  "ger_training_started": false,
+  "formal_commands": [
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/generate_nbest.py",
+      "--config",
+      "configs/asr-paper.json",
+      "--manifest",
+      "data/audio_inputs/train.jsonl",
+      "--output",
+      "data/hypotheses/whisper-large-v2-beam60/train.jsonl"
+    ],
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/generate_nbest.py",
+      "--config",
+      "configs/asr-paper.json",
+      "--manifest",
+      "data/audio_inputs/dev.jsonl",
+      "--output",
+      "data/hypotheses/whisper-large-v2-beam60/dev.jsonl"
+    ],
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/generate_nbest.py",
+      "--config",
+      "configs/asr-paper.json",
+      "--manifest",
+      "data/audio_inputs/test.jsonl",
+      "--output",
+      "data/hypotheses/whisper-large-v2-beam60/test.jsonl"
+    ],
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/evaluate.py",
+      "--references",
+      "data/references/train.jsonl",
+      "--hypotheses",
+      "data/hypotheses/whisper-large-v2-beam60/train.jsonl",
+      "--output",
+      "reports/whisper-large-v2-beam60-train.json"
+    ],
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/build_ger_data.py",
+      "--hypotheses",
+      "data/hypotheses/whisper-large-v2-beam60/train.jsonl",
+      "--references",
+      "data/references/train.jsonl",
+      "--output",
+      "data/ger/whisper-large-v2-beam60/train.json",
+      "--inference-output",
+      "data/ger/whisper-large-v2-beam60/train-inputs.json"
+    ],
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/evaluate.py",
+      "--references",
+      "data/references/dev.jsonl",
+      "--hypotheses",
+      "data/hypotheses/whisper-large-v2-beam60/dev.jsonl",
+      "--output",
+      "reports/whisper-large-v2-beam60-dev.json"
+    ],
+    [
+      "conda",
+      "run",
+      "--no-capture-output",
+      "-n",
+      "vanilla-ger-asr",
+      "python",
+      "scripts/build_ger_data.py",
+      "--hypotheses",
+      "data/hypotheses/whisper-large-v2-beam60/dev.jsonl",
+      "--references",
+      "data/references/dev.jsonl",
+      "--output",
+      "data/ger/whisper-large-v2-beam60/dev.json",
+      "--inference-output",
+      "data/ger/whisper-large-v2-beam60/dev-inputs.json"
+    ]
+  ],
+  "formal_output_files_present": {
+    "train": false,
+    "dev": false,
+    "test": false
+  },
+  "sha256": {
+    "src/vanilla_ger/data.py": "24c95b27e8489e859b794a4dda38dfd381532580c7bf68d15c5ab2aae3c28fcb",
+    "scripts/check_asr_inputs.py": "b3af5a30f20191c15dd3a32ce116d0b54b95fc8270e705a60c0b63e724b9c5ae",
+    "scripts/download_data.py": "f13280c68af8fea88454b44b01f47d42a38f08e6731e9e5b20a7c8730e6674f8",
+    "scripts/prepare_voicebank.py": "1dffaed5baa0c4d96d00962cac89b65cdd1602182fd5b865187bacaa02be333e",
+    "scripts/prepare_full_asr.sh": "ad8393a789a7983c60e6c6ac872f457ac0603133bac8460c7c8a61b1822f1629",
+    "tests/test_pipeline.py": "789fb0f749432c1e754b140c68e5f273fcac38cdf81c1bab5cc4d15e9af5b86b",
+    "configs/downloads.json": "911d19ad9d96b5033752881bbdb239674d51c7ccf4b58f6ee74fc259ad45df04",
+    "configs/download-mirrors.json": "6d5222fe44761f37e539ef9465afc25ca6a53d76f25d2c4c56c49c04e0db8888",
+    "configs/asr-paper.json": "2b9ff30693f6dfdd0dc1a2e57d3d0725ce3c234182cce21721d0be22bc27fee6",
+    "configs/splits.json": "62cce698f3c9b0287aca20d4e6d045909751623e0a98d2cb5f7f80b7bfa8e8bb",
+    "reports/data_audit.json": "eea780d6f73afec7ca62869184a86529d05d80dac6862032abb632fb62677781",
+    "reports/asr-inputs-preflight.json": "312db3a3469687e6c5d2ee1c7f7b62a3b68e0cc4123d336b12c22326131d8dff",
+    "reports/voicebank-test-source-metadata.json": "cd20fa7763d2d3ed6848248c730caba35b1acb4d9aaa87938374069b3133e01b",
+    "reports/downloads.json": "996ef9e264bcf1b5f4b60f584805c4719abadde4781ba9fc772fbbbc914ba468",
+    "reports/VoiceBank三部分数据与ASR准备.md": "2340fe23a78dff726809ab80c652b8e526fa6483cee31852affabad2e764da19",
+    "data/manifests/train.jsonl": "76f26bc128967e69d951ee422a511e7b4fa3fd43fefb06178f4b6bd510f6c466",
+    "data/manifests/dev.jsonl": "29df112594640053682baed7dc62186e39794ee8bbfd501ce1ec5aab1c37b7d3",
+    "data/manifests/test.jsonl": "a9c77cafd2fdc4fb9b9aa8da140c8d0f200010d799008820e12d5eb542b5f522",
+    "data/audio_inputs/train.jsonl": "57486484893ed4d360480de7eccda6c63424728f22bf360f387ba2edac944cb1",
+    "data/audio_inputs/dev.jsonl": "4712879bbe1e53b27f94aff2d67f4a9e8399077aaede808f72e646558252cde9",
+    "data/audio_inputs/test.jsonl": "4ff3b5d015e46c6c990a9c17449e2ca8984a5a1c0a1069a9b2e561efec646c33",
+    "data/references/train.jsonl": "83fbd4cda1e9baaacf89c358428d62da2aacb3bb5c8a777a5a3d59f180fb6370",
+    "data/references/dev.jsonl": "3b4bbddf0032e6ab29b64431a6f2a9c7f45da3ad0f046340f51e719164c64bdb",
+    "data/references/test.jsonl": "e5949c5c00854a035ca109a6540004efa97100f168033ffda11113fab154ca00",
+    "data/hypotheses/whisper-large-v2-beam60-smoke-1/train.jsonl": "41f07f55f929fc12fcbd6f3a5171501795db8df115e455d83890109c514d6a61",
+    "data/hypotheses/whisper-large-v2-beam60-smoke-1/train.meta.json": "2243d27985b1bd7da436bfa4980cfdad3484efbf11b6bd73afd476d4d429433d",
+    "data/hypotheses/whisper-large-v2-beam60-smoke-1/dev.jsonl": "26b2e38cc25b559aa9ea3889ab6a43bebc6ad8dcbe1fad5494535fa8252db777",
+    "data/hypotheses/whisper-large-v2-beam60-smoke-1/dev.meta.json": "cb9353063a0523aad255498450ef68d1f18c75a263ecd21dca95987dd100479a",
+    "data/hypotheses/whisper-large-v2-beam60-smoke-1/test.jsonl": "f485a391c359aaf1a7177243370407304b536766e27fe2ad8d47d122b38ec008",
+    "data/hypotheses/whisper-large-v2-beam60-smoke-1/test.meta.json": "33678e09d057b89449460bf8f146ee7a04c1c8dbbf7116ce99a8edb40ecfcfdb"
+  }
+}
