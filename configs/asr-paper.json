@@ -1,0 +1,11 @@
+{
+  "model": "large-v2",
+  "device": "cuda",
+  "beam_size": 60,
+  "nbest": 5,
+  "language": "en",
+  "task": "transcribe",
+  "temperature": 0.0,
+  "without_timestamps": true,
+  "purpose": "Target cloud setting; CUDA memory/time validation still required"
+}

@@ -1,0 +1,19 @@
+{
+  "python": "3.10.22 | packaged by conda-forge | (main, Oct  6 2026, 22:55:54) [Clang 19.1.7 ]",
+  "executable": "/Users/zguoxu/miniforge3/envs/vanilla-ger-mac/bin/python",
+  "platform": "macOS-26.6.2-arm64-arm-64bit",
+  "architecture": "arm64",
+  "cuda_available": false,
+  "torch_cuda": null,
+  "mps_available": true,
+  "ffmpeg": "/Users/zguoxu/miniforge3/envs/vanilla-ger-mac/bin/ffmpeg",
+  "packages": {
+    "torch": "2.5.1",
+    "transformers": "4.46.3",
+    "peft": "0.13.2",
+    "numpy": "1.26.4",
+    "soundfile": "0.13.1",
+    "datasets": "3.1.0",
+    "accelerate": "1.1.1"
+  }
+}

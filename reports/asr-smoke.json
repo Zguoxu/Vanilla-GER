@@ -1,0 +1,22 @@
+{
+  "baseline": {
+    "substitutions": 32,
+    "deletions": 4,
+    "insertions": 99,
+    "errors": 135,
+    "reference_words": 141,
+    "utterances": 10,
+    "wer_percent": 95.74468085106383
+  },
+  "nbest_oracle": {
+    "substitutions": 31,
+    "deletions": 3,
+    "insertions": 92,
+    "errors": 126,
+    "reference_words": 141,
+    "utterances": 10,
+    "wer_percent": 89.36170212765957
+  },
+  "fewer_than_five": 8,
+  "normalization_version": "hyporadise-english-plus-number-normalizer-v1"
+}

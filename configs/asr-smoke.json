@@ -1,0 +1,8 @@
+{
+  "model": "tiny.en",
+  "device": "cpu",
+  "beam_size": 5,
+  "nbest": 5,
+  "limit": 10,
+  "purpose": "Local software smoke test; not the paper's ASR setting"
+}

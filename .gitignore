@@ -1,0 +1,15 @@
+.DS_Store
+__pycache__/
+*.py[cod]
+.pytest_cache/
+*.egg-info/
+.venv*/
+.env
+.env.*
+.cache/
+data/
+outputs/
+reports/*.details.jsonl
+third_party/Hypo2Trans/
+# Original paper is a local reference, not a project source file.
+*.pdf

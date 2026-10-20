@@ -1,0 +1,628 @@
+diff --git a/H2T-LoRA/finetune.py b/H2T-LoRA/finetune.py
+index 695f215..bdbf03c 100644
+--- a/H2T-LoRA/finetune.py
++++ b/H2T-LoRA/finetune.py
+@@ -1,250 +1,8 @@
+-import os
+-import sys
+-from typing import List
+-
+-import fire
+-import torch
+-import transformers
+-from datasets import load_dataset
+-
++"""Project adaptation of the official H2T-LoRA training entry point.
++See the root project README and patches/hypo2trans.patch for changes.
+ """
+-Unused imports:
+-import torch.nn as nn
+-import bitsandbytes as bnb
+-"""
+-
+-from peft import (
+-    LoraConfig,
+-    get_peft_model,
+-    get_peft_model_state_dict,
+-    prepare_model_for_int8_training,
+-    set_peft_model_state_dict,
+-)
+-from transformers import LlamaForCausalLM, LlamaTokenizer
+-
+-from utils.prompter import Prompter
+-
+-
+-def train(
+-    # model/data params
+-    base_model: str = "",  # the only required argument
+-    data_path: str = "./data/",
+-    output_dir: str = './output',
+-
+-    # training hyperparams
+-    batch_size: int = 256,
+-    micro_batch_size: int = 4,
+-    num_epochs: int = 10,
+-    learning_rate: float = 1e-4,
+-    cutoff_len: int = 256,
+-    val_set_size: int = 512,
+-    # lora hyperparams
+-    lora_r: int = 16,
+-    lora_alpha: int = 16,
+-    lora_dropout: float = 0.05,
+-    lora_target_modules: List[str] = [
+-        "q_proj",
+-        "k_proj",
+-        "v_proj",
+-        "o_proj",
+-    ],
+-    # llm hyperparams
+-    train_on_inputs: bool = True,  # if False, masks out inputs in loss
+-    add_eos_token: bool = True,
+-    group_by_length: bool = False,  # faster, but produces an odd training loss curve
+-    resume_from_checkpoint: str = None,  # either training checkpoint or final adapter
+-    prompt_template_name: str = "H2T-LoRA",  # The prompt template to use
+-):
+-    if int(os.environ.get("LOCAL_RANK", 0)) == 0:
+-        print(
+-            f"Training H2T-LoRA model with params:\n"
+-            f"base_model: {base_model}\n"
+-            f"data_path: {data_path}\n"
+-            f"output_dir: {output_dir}\n"
+-            f"batch_size: {batch_size}\n"
+-            f"micro_batch_size: {micro_batch_size}\n"
+-            f"num_epochs: {num_epochs}\n"
+-            f"learning_rate: {learning_rate}\n"
+-            f"cutoff_len: {cutoff_len}\n"
+-            f"val_set_size: {val_set_size}\n"
+-            f"lora_r: {lora_r}\n"
+-            f"lora_alpha: {lora_alpha}\n"
+-            f"lora_dropout: {lora_dropout}\n"
+-            f"lora_target_modules: {lora_target_modules}\n"
+-            f"train_on_inputs: {train_on_inputs}\n"
+-            f"add_eos_token: {add_eos_token}\n"
+-            f"group_by_length: {group_by_length}\n"
+-            f"resume_from_checkpoint: {resume_from_checkpoint or False}\n"
+-            f"prompt template: {prompt_template_name}\n"
+-        )
+-    assert (
+-        base_model
+-    ), "Please specify a --base_model, e.g. --base_model='huggyllama/llama-7b'"
+-    gradient_accumulation_steps = batch_size // micro_batch_size
+-
+-    prompter = Prompter(prompt_template_name)
+-
+-    device_map = "auto"
+-    world_size = int(os.environ.get("WORLD_SIZE", 1 ))
+-    ddp = world_size != 1
+-    if ddp:
+-        device_map = {"": int(os.environ.get("LOCAL_RANK") or 0)}
+-        gradient_accumulation_steps = gradient_accumulation_steps // world_size
+-
+-
+-
+-    model = LlamaForCausalLM.from_pretrained(
+-        base_model,
+-        load_in_8bit=True,
+-        torch_dtype=torch.float16,
+-        device_map=device_map,
+-    )
+-
+-    tokenizer = LlamaTokenizer.from_pretrained(base_model)
+-
+-    tokenizer.pad_token_id = (
+-        0  # unk. we want this to be different from the eos token
+-    )
+-    tokenizer.padding_side = "left"  # Allow batched inference
+-
+-    def tokenize(prompt, add_eos_token=True):
+-        # there's probably a way to do this with the tokenizer settings
+-        # but again, gotta move fast
+-        result = tokenizer(
+-            prompt,
+-            truncation=True,
+-            max_length=cutoff_len,
+-            padding=False,
+-            return_tensors=None,
+-        )
+-        if (
+-            result["input_ids"][-1] != tokenizer.eos_token_id
+-            and len(result["input_ids"]) < cutoff_len
+-            and add_eos_token
+-        ):
+-            result["input_ids"].append(tokenizer.eos_token_id)
+-            result["attention_mask"].append(1)
+-
+-        result["labels"] = result["input_ids"].copy()
+-
+-        return result
+-
+-    def generate_and_tokenize_prompt(data_point):
+-        full_prompt = prompter.generate_prompt(
+-            input=data_point["input1"],
+-            label=data_point["output"],
+-            input2=data_point["input2"],
+-        )
+-        tokenized_full_prompt = tokenize(full_prompt)
+-
+-        return tokenized_full_prompt
+-
+-    model = prepare_model_for_int8_training(model)
+-
+-    config = LoraConfig(
+-        r=lora_r,
+-        lora_alpha=lora_alpha,
+-        target_modules=lora_target_modules,
+-        lora_dropout=lora_dropout,
+-        bias="none",
+-        task_type="CAUSAL_LM",
+-    )
+-    model = get_peft_model(model, config)
+-
+-    if data_path.endswith(".json") or data_path.endswith(".jsonl"):
+-        data = load_dataset("json", data_files=data_path)
+-    else:
+-        data = load_dataset(data_path)
+-
+-    if resume_from_checkpoint:
+-        # Check the available weights and load them
+-        checkpoint_name = os.path.join(
+-            resume_from_checkpoint, "pytorch_model.bin"
+-        )  # Full checkpoint
+-        if not os.path.exists(checkpoint_name):
+-            checkpoint_name = os.path.join(
+-                resume_from_checkpoint, "adapter_model.bin"
+-            )  # only LoRA model - LoRA config above has to fit
+-            resume_from_checkpoint = (
+-                False  # So the trainer won't try loading its state
+-            )
+-        # The two files above have a different name depending on how they were saved, but are actually the same.
+-        if os.path.exists(checkpoint_name):
+-            print(f"Restarting from {checkpoint_name}")
+-            print(torch.cuda.get_device_name(0))
+-            adapters_weights = torch.load(checkpoint_name, map_location='cuda:2')
+-            set_peft_model_state_dict(model, adapters_weights)
+-        else:
+-            print(f"Checkpoint {checkpoint_name} not found")
+-
+-    model.print_trainable_parameters()  # Be more transparent about the % of trainable params.
+-
+-    if val_set_size > 0:
+-        train_val = data["train"].train_test_split(
+-            test_size=val_set_size, shuffle=True, seed=42
+-        )
+-        train_data = (
+-            train_val["train"].shuffle().map(generate_and_tokenize_prompt)
+-        )
+-        val_data = (
+-            train_val["test"].shuffle().map(generate_and_tokenize_prompt)
+-        )
+-    else:
+-        train_data = data["train"].shuffle().map(generate_and_tokenize_prompt)
+-        val_data = None
+-
+-    if not ddp and torch.cuda.device_count() > 1:
+-        # keeps Trainer from trying its own DataParallelism when more than 1 gpu is available
+-        model.is_parallelizable = True
+-        model.model_parallel = True
+-    trainer = transformers.Trainer(
+-        model=model,
+-        train_dataset=train_data,
+-        eval_dataset=val_data,
+-        args=transformers.TrainingArguments(
+-            per_device_train_batch_size=micro_batch_size,
+-            gradient_accumulation_steps=gradient_accumulation_steps,
+-            warmup_steps=100,
+-            num_train_epochs=num_epochs,
+-            learning_rate=learning_rate,
+-            fp16=True,
+-            logging_steps=10,
+-            optim="adamw_torch",
+-            evaluation_strategy="steps" if val_set_size > 0 else "no",
+-            save_strategy="steps",
+-            eval_steps=100 if val_set_size > 0 else None,
+-            save_steps=100,
+-            output_dir=output_dir,
+-            # save_total_limit=3,
+-            load_best_model_at_end=True if val_set_size > 0 else False,
+-            ddp_find_unused_parameters=False if ddp else None,
+-            group_by_length=group_by_length,
+-            report_to= None,
+-        ),
+-        data_collator=transformers.DataCollatorForSeq2Seq(
+-            tokenizer, pad_to_multiple_of=8, return_tensors="pt", padding=True
+-        ),
+-    )
+-    model.config.use_cache = False
+-
+-    old_state_dict = model.state_dict
+-    model.state_dict = (
+-        lambda self, *_, **__: get_peft_model_state_dict(
+-            self, old_state_dict()
+-        )
+-    ).__get__(model, type(model))
+-
+-    if torch.__version__ >= "2" and sys.platform != "win32":
+-        model = torch.compile(model)
+-
+-    trainer.train(resume_from_checkpoint=resume_from_checkpoint)
+-
+-    model.save_pretrained(output_dir)
+-
+-    print(
+-        "\n If there's a warning about missing keys above, please disregard :)"
+-    )
+-
++import fire
++from vanilla_ger.ger import train
+ 
+ if __name__ == "__main__":
+     fire.Fire(train)
+diff --git a/H2T-LoRA/inference.py b/H2T-LoRA/inference.py
+index 9c1f7e8..a76d034 100644
+--- a/H2T-LoRA/inference.py
++++ b/H2T-LoRA/inference.py
+@@ -1,138 +1,5 @@
+-import os
+-import sys
+-import editdistance
+-import torch
+-import transformers
+-from peft import PeftModel
+-from transformers import GenerationConfig, LlamaForCausalLM, LlamaTokenizer
+-import re
+-from utils.callbacks import Iteratorize, Stream
+-from utils.prompter import Prompter
+-from argparse import ArgumentParser
+-import json
+-import logging
+-
+-
+-if torch.cuda.is_available():
+-    device = "cuda"
+-else:
+-    device = "cpu"
+-
+-try:
+-    if torch.backends.mps.is_available():
+-        device = "mps"
+-except:  # noqa: E722
+-    pass
+-load_8bit = True
+-
+-
+-def calculate_wer(pre, ref):
+-    wer_score = editdistance.eval(pre, ref) / len(ref)
+-    return wer_score
+-
+-
+-if __name__ == '__main__':
+-    parser = ArgumentParser()
+-    parser.add_argument("--ckpt_path", type=str, required=True)
+-    parser.add_argument("--test_data_path", type=str, required=True, help='<your_test_data>.json')
+-    args = parser.parse_args()
+-
+-    prompter = Prompter("alpaca")
+-    tokenizer = LlamaTokenizer.from_pretrained('yahma/llama-13b-hf')
+-    model = LlamaForCausalLM.from_pretrained(
+-        'yahma/llama-13b-hf',
+-        load_in_8bit=load_8bit,
+-        torch_dtype=torch.float16,
+-        device_map='auto',
+-    )
+-    model = PeftModel.from_pretrained(
+-        model,
+-        args.ckpt_path,
+-        torch_dtype=torch.float16,
+-        device_map={'': 0},
+-    )
+-
+-    model.config.pad_token_id = 0
+-    model.config.bos_token_id = 1
+-    model.config.eos_token_id = 2
+-    if not load_8bit:
+-        model.half()
+-    model.eval()
+-
+-    if torch.__version__ >= "2" and sys.platform != "win32":
+-        model = torch.compile(model)
+-
+-
+-    def alpaca_infer(input1, input2=None):
+-        if input2 is not None:
+-            prompt = prompter.generate_prompt(input=input1, input2=input2)
+-        else:
+-            prompt = prompter.generate_prompt(input=input1)
+-        inputs = tokenizer(prompt, return_tensors="pt")
+-        input_ids = inputs["input_ids"].to(device)
+-        generation_config = GenerationConfig(
+-            temperature=0.1,
+-            top_p=0.75,
+-            top_k=40,
+-            num_beams=4,
+-            max_new_tokens=256,
+-            stream_output=False,
+-            prompter=prompter,
+-            model=model,
+-        )
+-        with torch.no_grad():
+-            generation_output = model.generate(
+-                input_ids=input_ids,
+-                generation_config=generation_config,
+-                return_dict_in_generate=True,
+-                output_scores=True,
+-                max_new_tokens=256,
+-            )
+-
+-        s = generation_output.sequences[0]
+-        output = tokenizer.decode(s)
+-        return prompter.get_response(output)
+-
+-
+-    with open(args.test_data_path, 'r') as f:
+-        test_data = json.load(f)
+-
+-    before = 0
+-    after = 0
+-
+-    ignore = 0
+-
+-    for i in range(len(test_data)):
+-
+-        best_hypo = test_data[i]['input1']
+-        input2 = test_data[i]['input2']
+-        ground_truth = test_data[i]['output']
+-        prediction = alpaca_infer(input1=best_hypo, input2=input2)
+-
+-        prediction = re.sub('</s>', '', prediction).lower()
+-        prediction = re.sub(r'[^\w\s]|[\d]', '', prediction)
+-        best_hypo = re.sub(r'[^\w\s]|[\d]', '', best_hypo)
+-        ground_truth = re.sub(r'[^\w\s]|[\d]', '', ground_truth)
+-        prediction = re.sub(r'\n+.+', '', prediction)
+-
+-        try:
+-            wer_prediction = calculate_wer(prediction.split(), ground_truth.split())
+-            wer_best_hypo = calculate_wer(best_hypo.split(), ground_truth.split())
+-        except Exception:
+-            ignore += 1
+-            continue
+-
+-        before = before + wer_best_hypo
+-        after = after + wer_prediction
+-        if wer_best_hypo != wer_prediction:
+-            print('before:::', best_hypo)
+-            print('after :::', prediction)
+-            print('answer:::', ground_truth)
+-            print('before score', wer_best_hypo)
+-            print('after score', wer_prediction)
+-
+-
+-    print('before', before / (len(test_data) - ignore))
+-    print('after', after / (len(test_data) - ignore))
+-
++"""Project adaptation: same trained base/template, label-free inputs, separate scoring."""
++from vanilla_ger.ger import inference_main
+ 
++if __name__ == "__main__":
++    inference_main()
+diff --git a/H2T-LoRA/utils/__pycache__/prompter.cpython-310.pyc b/H2T-LoRA/utils/__pycache__/prompter.cpython-310.pyc
+index 381403e18fd96f218e14225c50c53ad65dcd904b..03919da50c25d32dc13332da24ae96ab34d9f201 100644
+GIT binary patch
+delta 950
+zcmZ8gO-~a+7@n_fw@XVfd?dxMViZydX=prXJQ#yUOiT~u!-$8?!Yr`0-QCPgBam%~
+z_GW?x_ee-+y!bynd+^|8|A65y2!ih{BF34#&&)jY&b#mX%<NJAO@ARM6f6Yo(~s|s
+zue*gWINbd<F_1I)AkVp3Zn|uh6w&U<yX_o!&49_z01=6hjUp_w9Cxt72Lz1%F{X?j
+z)}50G?;%e2Nso5)ZYH8VEXP%rvxx4YebU8mu`(mt#UJ`ROyv%&i1jeU?t6|nV$i!3
+zBj21xGxGjxjFIjyz#`N@qOS7XNI#K*bsx_b5d>vj@Z)GMwX#{;GH0vvQ_q6>!}tz)
+zI#mz`6p+wBh6!r~o}Xm7Cw!;nCRt}$hK^cKOxs@dnyzif@5$m^5&VDJl?CYvS=m}^
+z2OI6mqhO`oa(yK$?nWp)J*_M{zSnFzr6-T;6}9dOZikLgo0ZwkFsRN8$Cs7AnH1<G
+z9*^(Q+rx(Ehi#P@O=sC{CYf|qjXU(lc3lfiWnS0HaS=6e1d{IH4)d*)qi0-1Iolx}
+z77>oxSd=2R2N$H}1r9Zcm{2rIRf*UfDjT(>flvgkP}%EMWlt}=Qk8MS^!V@2g6*eU
+zM3l5(nLw?B0A(gvx?BxJ%TcMAVi=gRAx2;jS2SGJa19`#!j(cRcm|{KDjVw~*gUl;
+z!<kbv{>bibQ`py0)Ayy1otNB!7j%H3Fw!F&$~_=GxY#nQE%ig(Fz}^o%dqLGLky=5
+zPob6RS%OB&Cx%qQ3xQ0Ny9HiJrsarNuDHnRx){}be$7?(dDv-Sq|V90L-Cw3MrbW=
+z8xPhl10{%tn;IrHT$Gp2bTFYy(tnmL0hoy4Awn(@OfWmP2syDR`DHP3ObqL2WH|LM
+Z=aQ^#^I*lc#b8{_R0sZ#8^6qyegiKQ?hpU~
+
+delta 816
+zcmZ8f&ubGw6rMLTyV;~ot*x|8m0CrSRZ7}|peIo;^^!|PF_&e{Z0&|*cbT0c!i1v1
+zi%_Jlw^Ew?Eqd}Mh=)B09{m%v)%s@RFWg~1X1@34oA15ZrxS<c)wo)%5d7ZWyd|FR
+zR^PzJ?)yu&m=@)LXAZpBb})DwXZjjJQ%yXgAuS2$fr0@QRKp$-Y@ZHkk0HY}8$x<U
+zaltj)Bm1-u&p=t4_2K12k1Kmn(tHT0<J>2La2$OGByv_ry7Cx+nDGFoCT$|umQ-0-
+z#T7OZjwsa#it;`t3bI~I*J(6uzmxbaKf6osoUBL-t>!FFlbpBXFv{N1d+rQ!->%j-
+z<8Dw-H^V2(%d6Mxem9QlVXIRg9bf9i($7+M1*WnCc6oj*j8Y}HS}KgA+zO*)OXXI_
+ze;9PKPwf15qv(jN8m9tkqzxK0c4UY4cvLP}Hev<efgbilE@-|-Mt#9OX;XPoF<q3S
+z`8si}MsqxoaW_$3ah*$L4R4Y22+b3}B2iof*OUuI)a8<6JhwMu+4WUXzMMkFwdAxp
+z{YOHcHhD}2sWkl<!EE+{pBv-g99K96`<TD7u5D8c8`0wF=WwB6V4eg_p+gX~Mh0|<
+zFW|C9a{>jEI7$OAO**0a0+{cz+$we>Zx%K(Ot757&>|-M>j1a;_@h91zlAERNTtTa
+zT=vmA2Q>R?-3W{iX-Ik2zy$+;>nK*UhGPikuTB>b9KzugrBf965vBA;h0*U==n=Il
+ehch!pu3OGao+sj#=gG<Jz+RpFUp4z|Fa89fOuRP$
+
+diff --git a/H2T-LoRA/utils/prompter.py b/H2T-LoRA/utils/prompter.py
+index 832188c..a217457 100644
+--- a/H2T-LoRA/utils/prompter.py
++++ b/H2T-LoRA/utils/prompter.py
+@@ -15,7 +15,7 @@ class Prompter(object):
+         if not template_name:
+             # Enforce the default here, so the constructor can be called with '' and will not break.
+             template_name = "H2T-LoRA"
+-        file_name = osp.join("templates", f"{template_name}.json")
++        file_name = osp.join(osp.dirname(osp.dirname(osp.abspath(__file__))), "templates", f"{template_name}.json")
+         if not osp.exists(file_name):
+             raise ValueError(f"Can't read {file_name}")
+         with open(file_name) as fp:
+@@ -33,18 +33,19 @@ class Prompter(object):
+     ) -> str:
+         # returns the full prompt from instruction and optional input
+         # if a label (=response, =output) is provided, it's also appended.
+-        if input2 is None:
++        if not input2:
+             res = self.template["prompt_h2t_1best"].format(
+-                     input=input)
+-        if input2 is not None:
++                     best=input)
++        else:
+             res = self.template["prompt_h2t_nbest"].format(
+                 best=input, others=input2)
+ 
+-        if label:
++        if label is not None:
+             res = f"{res}{label}"
+         if self._verbose:
+             print(res)
+         return res
+ 
+     def get_response(self, output: str) -> str:
+-        return output.split(self.template["response_split"])[1].strip()
++        marker = self.template["response_split"]
++        return output.split(marker, 1)[-1].strip()
+diff --git a/generate_data/whisper/generate_hp_dataset.py b/generate_data/whisper/generate_hp_dataset.py
+index d602e31..a49b229 100644
+--- a/generate_data/whisper/generate_hp_dataset.py
++++ b/generate_data/whisper/generate_hp_dataset.py
+@@ -1,92 +1,7 @@
+-import whisper
+-import os, random, copy
+-import numpy as np
+-import torch
+-import pandas as pd
+-import whisper
+-import torchaudio
+-from tqdm.notebook import tqdm
+-import collections, json
+-import editdistance
+-from whisper.normalizers import EnglishTextNormalizer
+-from num2words import num2words
+-import re
+-
+-normalizer = EnglishTextNormalizer()
+-
+-
+-def calculate_wer(pre, ref):
+-    return editdistance.eval(pre, ref) / len(ref)
+-
+-DEVICE = "cuda" if torch.cuda.is_available() else "cpu"
+-model = whisper.load_model('base')
+-
+-if __name__ == '__main__':
+-    import argparse
+-    parser = argparse.ArgumentParser(description='HP dataset generation', formatter_class=argparse.ArgumentDefaultsHelpFormatter)
+-    parser.add_argument('--asr_wav', type=str, help='wav list file')
+-    parser.add_argument('--asr_txt', type=str, help='transcription file')
+-    parser.add_argument('--hp_json', type=int, help='generated hp data file')
+-    args = parser.parse_args()
+-
+-    f_wav = open(args.asr_wav, 'r')
+-    f_txt = open(args.asr_txt, 'r')
+-
+-    json_file = []
+-    id = 0
+-    wer = 0
+-    for line in f_wav.readlines():
+-        audio_path = line.strip().split()[-1]
+-        gt = ' '.join(f_txt.readline().strip().split()[1:])
+-        audio = whisper.load_audio(audio_path)
+-        audio = whisper.pad_or_trim(audio)
+-        mel = whisper.log_mel_spectrogram(audio).to(model.device)
+-        options = whisper.DecodingOptions(language='en', beam_size=50)
+-        results = whisper.decode(model, mel, options)
+-
+-        input = []
+-        for result in results:
+-            if len(input) < 5 and len(result) > 0 and result not in input:
+-                input.append(result)
+-        if len(input) < 5:
+-            for _ in range(5 - len(input)):
+-                repeat = copy.deepcopy(random.choice(input))
+-                input.append(repeat)
+-
+-        for i in range(len(input)):
+-            try:
+-                text = normalizer(input[i])
+-                text = re.sub(r"[-+]?\d*\.?\d+|\d+%?", lambda m: num2words(m.group()), text).replace('%', ' percent')
+-            except Exception:
+-                text = normalizer(input[i])
+-                print(f'input exception: {text}')
+-
+-            input[i] = text if len(text) > 0 else '<UNK>'
+-
+-        try:
+-            output = normalizer(gt)
+-            output = re.sub(r"[-+]?\d*\.?\d+|\d+%?", lambda m: num2words(m.group()), output).replace('%', ' percent')
+-        except Exception:
+-            output = normalizer(gt)
+-            print(f'output exception: {output}')
+-
+-        output = output if len(output) > 0 else '<UNK>'
+-
+-        data = {"input": input, "output": output}
+-        json_file.append(data)
+-
+-        # calculate wer
+-        cur_wer = calculate_wer(input[0].split(), output.split())
+-        id += 1
+-        wer += cur_wer
+-        print(f'Utterance {id}: WER = {cur_wer}')
+-
+-    f_wav.close()
+-    f_txt.close()
+-
+-    wer /= id
+-    print(f'Final WER = {wer}')
+-
+-    with open(args.hp_json, 'w') as f:
+-        json.dump(json_file, f)
++"""Project adaptation of the author-provided N-best generation entry point.
++Use --manifest and --output; join references later with build_ger_data.py.
++"""
++from vanilla_ger.asr import main
+ 
++if __name__ == "__main__":
++    main()
+diff --git a/generate_data/whisper/whisper/__init__.py b/generate_data/whisper/whisper/__init__.py
+index 0f79e45..f8202f5 100644
+--- a/generate_data/whisper/whisper/__init__.py
++++ b/generate_data/whisper/whisper/__init__.py
+@@ -24,6 +24,7 @@ _MODELS = {
+     "medium.en": "https://openaipublic.azureedge.net/main/whisper/models/d7440d1dc186f76616474e0ff0b3b6b879abc9d1a4926b7adfa41db2d497ab4f/medium.en.pt",
+     "medium": "https://openaipublic.azureedge.net/main/whisper/models/345ae4da62f9b3d59415adc60127b97c714f32e89e936602e85993674d08dcb1/medium.pt",
+     "large": "https://openaipublic.azureedge.net/main/whisper/models/e4b87e7e0bf463eb8e6956e646f1e277e901512310def2c24bf0e11bd3c28e9a/large.pt",
++    "large-v2": "https://openaipublic.azureedge.net/main/whisper/models/81f7c96c852ee8fc832187b0132e569d6c3065a3252ed18e56effd0b6a73e524/large-v2.pt",
+ }
+ 
+ 
+@@ -103,7 +104,7 @@ def load_model(name: str, device: Optional[Union[str, torch.device]] = None, dow
+         raise RuntimeError(f"Model {name} not found; available models = {available_models()}")
+ 
+     with (io.BytesIO(checkpoint_file) if in_memory else open(checkpoint_file, "rb")) as fp:
+-        checkpoint = torch.load(fp, map_location=device)
++        checkpoint = torch.load(fp, map_location=device, weights_only=True)
+     del checkpoint_file
+ 
+     dims = ModelDimensions(**checkpoint["dims"])
+diff --git a/generate_data/whisper/whisper/decoding.py b/generate_data/whisper/whisper/decoding.py
+index 8309896..8e8deaa 100644
+--- a/generate_data/whisper/whisper/decoding.py
++++ b/generate_data/whisper/whisper/decoding.py
+@@ -98,6 +98,7 @@ class DecodingOptions:
+ 
+     # implementation details
+     fp16: bool = True  # use fp16 for most of the calculation
++    return_scores: bool = False  # expose model scores without involving reference text
+ 
+ 
+ @dataclass(frozen=True)
+@@ -661,9 +662,13 @@ class DecodingTask:
+         # print(f'texts = {texts}')
+ 
+         import heapq
+-        top50_list = [heapq.nlargest(50, range(len(a)), a.__getitem__) for a in avg_logprobs]
++        top50_list = [heapq.nlargest(len(a), range(len(a)), a.__getitem__) for a in avg_logprobs]
+         # print(f'top50_list = {top50_list}')
+ 
++        if self.options.return_scores:
++            return [[{"text": texts[k][i], "avg_logprob": float(avg_logprobs[k][i]),
++                      "sum_logprob": float(sum_logprobs[k][i])} for i in indices]
++                    for k, indices in enumerate(top50_list)]
+         texts = [[text[i] for i in top50] for text, top50 in zip(texts, top50_list)]
+ 
+         return texts

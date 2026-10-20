@@ -1,0 +1,15 @@
+[build-system]
+requires = ["setuptools>=68,<81"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "vanilla-ger"
+version = "0.1.0"
+description = "VoiceBank-DEMAND adaptation of HyPoradise H2T-LoRA"
+requires-python = ">=3.10"
+
+[tool.setuptools.packages.find]
+where = ["src"]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
